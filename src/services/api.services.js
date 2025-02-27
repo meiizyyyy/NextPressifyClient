@@ -1,12 +1,11 @@
-import axios from "./axios.customize";
+// api.services.js
+import useSWR from "swr";
+import axios from "axios";
 
-const fetchAllProductsAPI = async () => {
-    try {
-        const response = await axios.get("/products"); // Đổi URL API thành đúng endpoint
-        return response.data; // Đảm bảo trả về dữ liệu từ API
-    } catch (error) {
-        throw new Error(error.response?.data?.message || "Lỗi khi lấy sản phẩm");
-    }
+// Hàm fetcher sử dụng axios
+const fetcher = (url) => axios.get(url).then((res) => res.data);
+
+// Hàm fetchAllProducts cố định URL
+export const fetchAllProducts = () => {
+    return useSWR("http://localhost:8000/api/products", fetcher);
 };
-
-export { fetchAllProductsAPI };
