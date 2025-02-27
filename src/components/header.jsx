@@ -19,7 +19,7 @@ import {
 } from "@heroui/react";
 import React, { useState } from "react";
 import CartIcon from "@components/cart/cart_icon";
-import ButtonComponent from "@components/ui/button";
+import ButtonComponent from "@/components/ui/Button";
 
 export const AcmeLogo = () => {
     return (
@@ -104,15 +104,7 @@ const Header = () => {
 
                     <Dropdown placement="bottom-end">
                         <DropdownTrigger>
-                            <Avatar
-                                isBordered
-                                as="button"
-                                className="transition-transform"
-                                color="secondary"
-                                name="Jason Hughes"
-                                size="sm"
-                                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                            />
+                            <Avatar isBordered as="button" className="transition-transform" color="secondary" name="Jason Hughes" size="sm" src="" />
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Profile Actions" variant="flat">
                             <DropdownItem key="profile" className="h-14 gap-2">

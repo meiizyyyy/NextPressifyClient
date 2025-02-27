@@ -11,11 +11,14 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@heroui/react": "^2.7.2",
+    "axios": "^1.8.1",
+    "dotenv": "^16.4.7",
     "framer-motion": "^12.4.7",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "swiper": "^11.2.4",
+    "swr": "^2.3.2",
     "tailwind-scrollbar-hide": "^2.0.0"
   },
   "devDependencies": {

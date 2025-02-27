@@ -4,18 +4,19 @@ import { Button, Card, CardBody, CardFooter, Image, CardHeader } from "@heroui/r
 const CollectionsGrid = () => {
     return (
         <>
-            <Card>
-                <CardBody className="backdrop-blur-sm bg-white/30 dark:bg-black/30">
-                    <p className="text-center">Make beautiful websites regardless of your design experience.</p>
-                </CardBody>
-            </Card>
             <div className="gap-2 grid grid-cols-12 grid-rows-2">
-                <Card className="col-span-12 sm:col-span-4 h-[300px] " isHoverable="true">
+                <Card className="col-span-12 sm:col-span-4 h-[300px] " isHoverable="true" radius="sm">
                     <CardHeader className="absolute z-10 top-1 flex-col !items-start">
                         <p className="text-tiny text-white/60 uppercase font-bold">What to watch</p>
                         <h4 className="text-white font-medium text-large">Stream the Acme event</h4>
                     </CardHeader>
-                    <Image removeWrapper alt="Card background" className="z-0 w-full h-full object-cover" src="https://heroui.com/images/card-example-4.jpeg" />
+                    <Image
+                        removeWrapper
+                        radius="sm"
+                        alt="Card background"
+                        className="z-0 w-full h-full object-cover"
+                        src="https://heroui.com/images/card-example-4.jpeg"
+                    />
                     <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
                         <div className="flex flex-grow gap-2 items-center">
                             <Image
@@ -33,12 +34,18 @@ const CollectionsGrid = () => {
                         </Button>
                     </CardFooter>
                 </Card>
-                <Card className="col-span-12 sm:col-span-4 h-[300px]">
+                <Card className="col-span-12 sm:col-span-4 h-[300px]" radius="sm">
                     <CardHeader className="absolute z-10 top-1 flex-col !items-start">
                         <p className="text-tiny text-white/60 uppercase font-bold">Plant a tree</p>
                         <h4 className="text-white font-medium text-large">Contribute to the planet</h4>
                     </CardHeader>
-                    <Image removeWrapper alt="Card background" className="z-0 w-full h-full object-cover" src="https://heroui.com/images/card-example-3.jpeg" />
+                    <Image
+                        removeWrapper
+                        radius="sm"
+                        alt="Card background"
+                        className="z-0 w-full h-full object-cover"
+                        src="https://heroui.com/images/card-example-3.jpeg"
+                    />
                     <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
                         <div className="flex flex-grow gap-2 items-center">
                             <Image
@@ -56,12 +63,18 @@ const CollectionsGrid = () => {
                         </Button>
                     </CardFooter>
                 </Card>
-                <Card className="col-span-12 sm:col-span-4 h-[300px]">
+                <Card className="col-span-12 sm:col-span-4 h-[300px]" radius="sm">
                     <CardHeader className="absolute z-10 top-1 flex-col !items-start">
                         <p className="text-tiny text-white/60 uppercase font-bold">Supercharged</p>
                         <h4 className="text-white font-medium text-large">Creates beauty like a beast</h4>
                     </CardHeader>
-                    <Image removeWrapper alt="Card background" className="z-0 w-full h-full object-cover" src="https://heroui.com/images/card-example-2.jpeg" />
+                    <Image
+                        removeWrapper
+                        radius="sm"
+                        alt="Card background"
+                        className="z-0 w-full h-full object-cover"
+                        src="https://heroui.com/images/card-example-2.jpeg"
+                    />
                     <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
                         <div className="flex flex-grow gap-2 items-center">
                             <Image
@@ -79,13 +92,14 @@ const CollectionsGrid = () => {
                         </Button>
                     </CardFooter>
                 </Card>
-                <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-5">
+                <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-5 " radius="sm">
                     <CardHeader className="absolute z-10 top-1 flex-col items-start">
                         <p className="text-tiny text-white/60 uppercase font-bold">New</p>
                         <h4 className="text-black font-medium text-2xl">Acme camera</h4>
                     </CardHeader>
                     <Image
                         removeWrapper
+                        radius="sm"
                         alt="Card example background"
                         className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
                         src="https://heroui.com/images/card-example-6.jpeg"
@@ -107,13 +121,14 @@ const CollectionsGrid = () => {
                         </Button>
                     </CardFooter>
                 </Card>
-                <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-7">
+                <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-7" radius="sm">
                     <CardHeader className="absolute z-10 top-1 flex-col items-start">
                         <p className="text-tiny text-white/60 uppercase font-bold">Your day your way</p>
                         <h4 className="text-white/90 font-medium text-xl">Your checklist for better sleep</h4>
                     </CardHeader>
                     <Image
                         removeWrapper
+                        radius="sm"
                         alt="Relaxing app background"
                         className="z-0 w-full h-full object-cover"
                         src="https://heroui.com/images/card-example-5.jpeg"
