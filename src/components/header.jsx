@@ -4,7 +4,6 @@ import {
     NavbarBrand,
     NavbarContent,
     NavbarItem,
-    Link,
     Input,
     DropdownItem,
     DropdownTrigger,
@@ -16,10 +15,15 @@ import {
     NavbarMenuToggle,
     Card,
     CardBody,
+    Button,
+    Progress,
 } from "@heroui/react";
 import React, { useState } from "react";
 import CartIcon from "@components/cart/cart_icon";
 import ButtonComponent from "@/components/ui/Button";
+import { fetchBottomHeaderMenu } from "@/services/api.services";
+import Link from "next/link";
+import LinkComponent from "./ui/Link";
 
 export const AcmeLogo = () => {
     return (
@@ -52,19 +56,23 @@ export const SearchIcon = ({ size = 24, strokeWidth = 1.5, width, height, ...pro
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const { data, error, isLoading } = fetchBottomHeaderMenu();
+
     const menuItems = ["Profile", "Dashboard", "Activity", "Analytics", "System", "Deployments", "My Settings", "Team Settings", "Help & Feedback", "Log Out"];
 
-    const HeaderBrandData = ["Asus", "Acer", "Dell", "HP", "Lenovo", "LG", "Razer", "Samsung"];
-
+    const HeaderBrandData = data?.data.menu.items || [];
+    console.log(HeaderBrandData);
     return (
         <>
             <Navbar maxWidth="xl">
                 <NavbarContent justify="start">
                     <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} className="sm:hidden" />
-                    <NavbarBrand className="mr-4">
-                        <AcmeLogo />
-                        <p className="hidden sm:block font-bold text-inherit">Nextifyyy</p>
-                    </NavbarBrand>
+                    <Link href="/">
+                        <NavbarBrand className="mr-4">
+                            <AcmeLogo />
+                            <p className="hidden sm:block font-bold text-inherit">Nextifyyy</p>
+                        </NavbarBrand>
+                    </Link>
                     <NavbarContent className="hidden sm:flex gap-10">
                         <NavbarItem>
                             <Link color="foreground" href="#">
@@ -97,11 +105,13 @@ const Header = () => {
                         startContent={<SearchIcon size={18} />}
                         type="search"
                     />
+                </NavbarContent>
 
-                    <NavbarItem className="px-3 cursor-pointer">
-                        <CartIcon />
-                    </NavbarItem>
+                <NavbarItem>
+                    <CartIcon />
+                </NavbarItem>
 
+                <NavbarItem>
                     <Dropdown placement="bottom-end">
                         <DropdownTrigger>
                             <Avatar isBordered as="button" className="transition-transform" color="secondary" name="Jason Hughes" size="sm" src="" />
@@ -122,15 +132,14 @@ const Header = () => {
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
-                </NavbarContent>
-
+                </NavbarItem>
                 <NavbarMenu>
                     {menuItems.map((item, index) => (
                         <NavbarMenuItem key={`${item}-${index}`}>
                             <Link
                                 className="w-full"
                                 color={index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"}
-                                href="#"
+                                href="/"
                                 size="lg">
                                 {item}
                             </Link>
@@ -139,9 +148,9 @@ const Header = () => {
                 </NavbarMenu>
             </Navbar>
             <Card isBlurred shadow="sm" radius="none">
-                <CardBody className="container mx-auto flex flex-row gap-12 justify-start lg:justify-center items-center scrollbar-hide overflow-x-auto">
+                <CardBody className="container mx-auto flex flex-row gap-3 xl:gap-12 justify-start lg:justify-center items-center scrollbar-hide overflow-x-auto">
                     {HeaderBrandData.map((item, index) => {
-                        return <ButtonComponent key={`${item}-${index}`} size="sm" variant="light" content={item} />;
+                        return <ButtonComponent key={`${item}-${index}`} size="sm" variant="light" content={item.title} path={item.url} />;
                     })}
                 </CardBody>
             </Card>
