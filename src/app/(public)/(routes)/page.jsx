@@ -15,12 +15,18 @@ const App = () => {
 	const { data, error, isLoading } = fetchAllProducts(cursor);
 
 	useEffect(() => {
+		setProductList([]);
+	},[]);
+
+	useEffect(() => {
 		if (data?.data?.productsList) {
 			setProductList((prev) => [...prev, ...data.data.productsList]);
 		}
 	}, [data]);
+
 	const nextPageCursor = data?.data?.pageInfo?.endCursor;
 	console.log("products list :", ProductList);
+
 	const handleLoadMore = useCallback(() => {
 		if (nextPageCursor) {
 			setCursor(nextPageCursor);

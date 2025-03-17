@@ -4,11 +4,7 @@ import { HeroUIProvider } from "@heroui/react";
 import { useRouter, useNavigate } from "next/navigation";
 
 export function Providers({ children }) {
-    const router = useRouter();
+	const router = useRouter();
 
-    return (
-        <HeroUIProvider navigate={router.push} useHref={(path) => path}>
-            {children}
-        </HeroUIProvider>
-    );
+	return <HeroUIProvider navigate={router.push}>{children}</HeroUIProvider>;
 }

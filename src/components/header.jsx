@@ -17,11 +17,12 @@ import {
 	CardBody,
 	Button,
 	Progress,
+	Skeleton,
 } from "@heroui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CartIcon from "@components/cart/cart_icon";
 import ButtonComponent from "@/components/ui/Button";
-import { fetchBottomHeaderMenu } from "@/services/api.services";
+import { fetchBottomHeaderMenu, fetchHeaderCollection, fetchHeaderMainMenu } from "@/services/api.services";
 import Link from "next/link";
 import LinkComponent from "./ui/Link";
 import InfomationBar from "./InfomationBar";
@@ -71,7 +72,12 @@ export const SearchIcon = ({ size = 24, strokeWidth = 1.5, width, height, ...pro
 const Header = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	// const { data, error, isLoading } = fetchBottomHeaderMenu();
+	const { data: headerMainData, error: headerMainError, isLoading: headerMainLoading } = fetchHeaderMainMenu();
+	const {
+		data: headerCollectionData,
+		error: headerCollectionError,
+		isLoading: headerCollectionLoading,
+	} = fetchHeaderCollection();
 
 	const menuItems = [
 		"Profile",
@@ -86,8 +92,6 @@ const Header = () => {
 		"Log Out",
 	];
 
-	// const HeaderBrandData = data?.data.menu.items || [];
-	// console.log(HeaderBrandData);
 	return (
 		<>
 			<Navbar maxWidth="full" height="3rem" className="py-1">
@@ -99,37 +103,17 @@ const Header = () => {
 							<p className="hidden sm:block font-bold text-inherit">Nextifyyy</p>
 						</NavbarBrand>
 					</Link>
-					<NavbarContent className="hidden md:flex gap-10">
-						<NavbarItem>
-							<Link color="foreground" href="#">
-								LAPTOP
-							</Link>
-						</NavbarItem>
-						<NavbarItem>
-							<Link color="foreground" href="#">
-								PC
-							</Link>
-						</NavbarItem>
-						<NavbarItem>
-							<Link color="foreground" href="#">
-								Màn Hình
-							</Link>
-						</NavbarItem>
-						<NavbarItem>
-							<Link color="foreground" href="#">
-								VGA
-							</Link>
-						</NavbarItem>
-						<NavbarItem>
-							<Link color="foreground" href="#">
-								CPU
-							</Link>
-						</NavbarItem>
-						<NavbarItem>
-							<Link color="foreground" href="#">
-								Newsfeed
-							</Link>
-						</NavbarItem>
+
+					<NavbarContent className="gap-6 hidden lg:flex">
+						{headerMainLoading
+							? [...Array(7)].map((_, index) => <Skeleton key={index} className="w-24 h-5" />)
+							: headerMainData?.data?.menu?.map((item, index) => (
+									<NavbarItem key={`${item.id}${index}`}>
+										<Link color="foreground" href={item.path}>
+											{item.title}
+										</Link>
+									</NavbarItem>
+							  ))}
 					</NavbarContent>
 				</NavbarContent>
 
@@ -201,19 +185,27 @@ const Header = () => {
 				</NavbarMenu>
 			</Navbar>
 			<Card isBlurred shadow="sm" radius="none">
-				{/* <CardBody className="container mx-auto flex flex-row gap-3 xl:gap-12 justify-start lg:justify-center items-center scrollbar-hide overflow-x-auto">
-					{HeaderBrandData.map((item, index) => {
-						return (
-							<ButtonComponent
-								key={`${item}-${index}`}
-								size="sm"
-								variant="light"
-								content={item.title}
-								path={item.url}
-							/>
-						);
-					})}
-				</CardBody> */}
+				<CardBody className=" flex flex-row gap-3 xl:gap-12 justify-start lg:justify-between items-center scrollbar-hide overflow-x-auto">
+					{headerCollectionLoading ? (
+						<Skeleton className="w-24 h-5" />
+					) : (
+						headerCollectionData?.data?.menu.map((item, index) => {
+							return (
+								<Button
+									key={`${item.id}${index}`}
+									as={Link}
+									href={item.path}
+									size="md"
+									radius="sm"
+									color="default"
+									variant="light"
+									className="">
+									{item.title}
+								</Button>
+							);
+						})
+					)}
+				</CardBody>
 			</Card>
 		</>
 	);
