@@ -1,4 +1,5 @@
 "use client";
+
 import {
 	Navbar,
 	NavbarBrand,
@@ -26,6 +27,7 @@ import { fetchBottomHeaderMenu, fetchHeaderCollection, fetchHeaderMainMenu } fro
 import Link from "next/link";
 import LinkComponent from "./ui/Link";
 import InfomationBar from "./InfomationBar";
+import Image from "next/image";
 
 export const AcmeLogo = () => {
 	return (
@@ -94,7 +96,48 @@ const Header = () => {
 
 	return (
 		<>
-			<Navbar maxWidth="full" height="3rem" className="py-1">
+			<Navbar
+				shouldHideOnScroll
+				position="static"
+				height={40}
+				className="w-full hidden  md:flex justify-center bg-[#191939]">
+				<Image
+					src="/thang_02_pc_gvn_banner_191b3b.jpg"
+					width={1200}
+					height={10}
+					alt="thang_02_pc_gvn_banner_191b3b"></Image>
+			</Navbar>
+			<Navbar
+				isBlurred
+				position="static"
+				shouldHideOnScroll
+				height="3rem"
+				maxWidth="full"
+				shadow="sm"
+				radius="none">
+				<ul className="flex gap-2 w-full justify-start md:justify-between scrollbar-hide overflow-x-auto">
+					{headerCollectionLoading ? (
+						<Skeleton className="w-full h-5" />
+					) : (
+						headerCollectionData?.data?.menu.map((item, index) => {
+							return (
+								<Button
+									key={`${item.id}${index}`}
+									as={Link}
+									href={item.path}
+									size="md"
+									radius="sm"
+									color="default"
+									variant="light"
+									className="">
+									{item.title}
+								</Button>
+							);
+						})
+					)}
+				</ul>
+			</Navbar>
+			<Navbar maxWidth="full" height="3rem" isBordered className="py-1">
 				<NavbarContent justify="center">
 					<NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} className="sm:hidden" />
 					<Link href="/">
@@ -109,9 +152,17 @@ const Header = () => {
 							? [...Array(7)].map((_, index) => <Skeleton key={index} className="w-24 h-5" />)
 							: headerMainData?.data?.menu?.map((item, index) => (
 									<NavbarItem key={`${item.id}${index}`}>
-										<Link color="foreground" href={item.path}>
+										<Button
+											key={`${item.id}${index}`}
+											as={Link}
+											href={item.path}
+											size="md"
+											radius="sm"
+											color="default"
+											variant="light"
+											className="">
 											{item.title}
-										</Link>
+										</Button>
 									</NavbarItem>
 							  ))}
 					</NavbarContent>
@@ -184,29 +235,6 @@ const Header = () => {
 					))}
 				</NavbarMenu>
 			</Navbar>
-			<Card isBlurred shadow="sm" radius="none">
-				<CardBody className=" flex flex-row gap-3 xl:gap-12 justify-start lg:justify-between items-center scrollbar-hide overflow-x-auto">
-					{headerCollectionLoading ? (
-						<Skeleton className="w-24 h-5" />
-					) : (
-						headerCollectionData?.data?.menu.map((item, index) => {
-							return (
-								<Button
-									key={`${item.id}${index}`}
-									as={Link}
-									href={item.path}
-									size="md"
-									radius="sm"
-									color="default"
-									variant="light"
-									className="">
-									{item.title}
-								</Button>
-							);
-						})
-					)}
-				</CardBody>
-			</Card>
 		</>
 	);
 };

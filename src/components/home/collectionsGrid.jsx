@@ -6,10 +6,10 @@ const CollectionsGrid = () => {
 		<>
 			<div className="gap-2 grid grid-cols-12 grid-rows-2">
 				<Card className="col-span-12 sm:col-span-7 h-[300px] " isHoverable="true" radius="sm">
-					{/* <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+					<CardHeader className="absolute z-10 top-1 flex-col !items-start">
 						<p className="text-tiny text-white/60 uppercase font-bold">What to watch</p>
 						<h4 className="text-white font-medium text-large">Stream the Acme event</h4>
-					</CardHeader> */}
+					</CardHeader>
 					<Image
 						removeWrapper
 						radius="sm"
@@ -65,8 +65,8 @@ const CollectionsGrid = () => {
 				</Card>
 				<Card className="col-span-12 sm:col-span-5 h-[300px]" radius="sm">
 					<CardHeader className="absolute z-10 top-1 flex-col !items-start">
-						{/* <p className="text-tiny text-white/60 uppercase font-bold">Supercharged</p>
-						<h4 className="text-white font-medium text-large">Creates beauty like a beast</h4> */}
+						<p className="text-tiny text-white/60 uppercase font-bold">Supercharged</p>
+						<h4 className="text-white font-medium text-large">Creates beauty like a beast</h4>
 					</CardHeader>
 					<Image
 						removeWrapper
