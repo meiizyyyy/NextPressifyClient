@@ -9,9 +9,9 @@ const ProductCard = ({ product, isLoading }) => {
 	return (
 		<Link href={"/"} className="hover:shadow-xl hover:scale-105 transition-all duration-250">
 			<Card className="pt-4 h-full flex flex-col justify-between " isFooterBlurred radius="none">
-				<CardBody className=" overflow-visible min-h-72 lg:min-h-72 max-h-72 py-2">
+				<CardBody className=" overflow-visible min-h-64 lg:min-h-64 max-h-64 py-2">
 					<Image
-                    radius="md"
+						radius="md"
 						// height={250}
 						alt="Card background"
 						className="object-cover max-h-64 lg:max-h-56 "
