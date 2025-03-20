@@ -100,7 +100,7 @@ const Header = () => {
 				shouldHideOnScroll
 				position="static"
 				height={40}
-				className="w-full hidden  md:flex justify-center bg-[#191939]">
+				className="w-full hidden lg:flex justify-center bg-[#191939]">
 				<Image
 					src="/thang_02_pc_gvn_banner_191b3b.jpg"
 					width={1200}
@@ -111,10 +111,11 @@ const Header = () => {
 				isBlurred
 				position="static"
 				shouldHideOnScroll
-				height="3rem"
+				height="2rem"
 				maxWidth="full"
 				shadow="sm"
-				radius="none">
+				radius="none"
+				className="hidden md:flex">
 				<ul className="flex gap-2 w-full justify-start md:justify-between scrollbar-hide overflow-x-auto">
 					{headerCollectionLoading ? (
 						<Skeleton className="w-full h-5" />
@@ -147,7 +148,7 @@ const Header = () => {
 						</NavbarBrand>
 					</Link>
 
-					<NavbarContent className="gap-6 hidden lg:flex">
+					<NavbarContent className="gap-6 hidden xl:flex overflow-hidden">
 						{headerMainLoading
 							? [...Array(7)].map((_, index) => <Skeleton key={index} className="w-24 h-5" />)
 							: headerMainData?.data?.menu?.map((item, index) => (
@@ -220,19 +221,25 @@ const Header = () => {
 					</Dropdown>
 				</NavbarItem>
 				<NavbarMenu>
-					{menuItems.map((item, index) => (
-						<NavbarMenuItem key={`${item}-${index}`}>
-							<Link
-								className="w-full"
-								color={
-									index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
-								}
-								href="/"
-								size="lg">
-								{item}
-							</Link>
-						</NavbarMenuItem>
-					))}
+					{headerCollectionLoading ? (
+						<Skeleton className="w-full h-5" />
+					) : (
+						headerMainData?.data?.menu?.map((item, index) => (
+							<NavbarItem key={`${item.id}${index}`}>
+								<Button
+									key={`${item.id}${index}`}
+									as={Link}
+									href={item.path}
+									size="lg"
+									radius="sm"
+									color="default"
+									variant="light"
+									className="">
+									{item.title}
+								</Button>
+							</NavbarItem>
+						))
+					)}
 				</NavbarMenu>
 			</Navbar>
 		</>

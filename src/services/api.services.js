@@ -46,3 +46,49 @@ export const fetchHomePageMarketing = () => {
 		},
 	);
 };
+
+export const fetchHomePageBanner = () => {
+	return useSWR(
+		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/home-page-banner`,
+		fetcher,
+		{
+			fallbackData: { data: [] },
+		},
+	);
+};
+
+export const fetchAllCollection = () => {
+	return useSWR(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections`, fetcher, {
+		fallbackData: { data: { collections: [] } },
+	});
+};
+
+export const fetchBrandCategoriesCollection = () => {
+	return useSWR(
+		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/brand-categories`,
+		fetcher,
+		{
+			fallbackData: { data: { collections: [] } },
+		},
+	);
+};
+
+export const fetchProductCategoriesCollection = () => {
+	return useSWR(
+		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/product-categories`,
+		fetcher,
+		{
+			fallbackData: { data: { collections: [] } },
+		},
+	);
+};
+
+export const fetchCollectionByHandle = (handle) => {
+	return useSWR(
+		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}`,
+		fetcher,
+		{
+			fallbackData: { data: { products: [] } },
+		},
+	);
+};

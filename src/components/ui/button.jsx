@@ -12,7 +12,6 @@ const ButtonComponent = ({ size, variant, color, path, content }) => {
 		<Button
 			as={Link}
 			href={path}
-			
 			size={size}
 			variant={variant}
 			radius="sm"

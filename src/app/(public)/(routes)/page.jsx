@@ -1,10 +1,13 @@
 "use client";
 
+import BannerSlider from "@/components/home/BannerSlider";
 import CollectionsGrid from "@/components/home/collectionsGrid";
+import HomePageCollection from "@/components/home/HomePageCollection";
+import ProductCardSkeleton from "@/components/skeletons/ProductCardSkeleton";
 import CardContentComponents from "@/components/ui/CardContent";
 import ProductCard from "@/components/ui/ProductCard";
 import { fetchAllProducts } from "@/services/api.services";
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardBody, Skeleton } from "@heroui/react";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 
@@ -16,7 +19,7 @@ const App = () => {
 
 	useEffect(() => {
 		setProductList([]);
-	},[]);
+	}, []);
 
 	useEffect(() => {
 		if (data?.data?.productsList) {
@@ -34,24 +37,37 @@ const App = () => {
 	}, [nextPageCursor]);
 
 	return (
-		<div className="h-[10000px] flex flex-col gap-5">
-			<CollectionsGrid />
-			<div className="grid grid-cols-2 gap-6 grid-rows-2 lg:grid-cols-4  xl:grid-cols-5">
-				{ProductList.map((product, index) => {
-					return <ProductCard key={product.id} product={product} />;
-				})}
+		<>
+			<BannerSlider />
+			<div className="h-[10000px] flex flex-col gap-5 min-w-full">
+				<CollectionsGrid />
+
+				{isLoading ? (
+					<ProductCardSkeleton />
+				) : (
+					<>
+						<div className="grid grid-cols-2 gap-6 grid-rows-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+							{ProductList.map((product, index) => {
+								return <ProductCard key={product.id} product={product} isLoading={isLoading} />;
+							})}
+						</div>
+						{nextPageCursor && (
+							<button onClick={handleLoadMore} className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+								Load More
+							</button>
+						)}
+					</>
+				)}
+
+				<Card radius="sm" shadow="none">
+					<CardBody>
+						<p>Make beautiful websites regardless of your design experience.</p>
+					</CardBody>
+				</Card>
+
+				<HomePageCollection />
 			</div>
-			{nextPageCursor && (
-				<button onClick={handleLoadMore} className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
-					Load More
-				</button>
-			)}
-			<Card radius="sm" shadow="none">
-				<CardBody>
-					<p>Make beautiful websites regardless of your design experience.</p>
-				</CardBody>
-			</Card>
-		</div>
+		</>
 	);
 };
 

@@ -36,21 +36,22 @@ const CollectionsGrid = () => {
 	return (
 		<div className="gap-2 grid grid-cols-12 grid-rows-2 min-w-full w-full">
 			{articles.map((article, index) => (
-				<Card key={article.id} className={getCardClass(index)} radius="sm">
+				<Card key={article.id} className={getCardClass(index)} radius="none">
 					<CardHeader className="absolute z-10 top-1 flex-col !items-start">
-						<p className="text-tiny text-white/60 uppercase font-bold">{article.title}</p>
-						<h4 className="text-white font-medium text-large">{article.title}</h4>
+						{/* <p className="text-tiny text-white/60 uppercase font-bold">{article.title}</p>
+						<h4 className="text-white font-medium text-large">{article.title}</h4> */}
 					</CardHeader>
 					<Image
 						removeWrapper
-						radius="sm"
+						radius="none"
 						alt="Card background"
-						className="z-0 w-full h-full object-cover"
+						className="z-0 h-full object-cover"
 						src={article.image?.url}
+						width={1500}
 					/>
-					<CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
+					<CardFooter className="absolute  bottom-0 z-10 ">
 						<div className="flex flex-grow gap-2 items-center">
-							<Image
+							{/* <Image
 								alt="Breathing app icon"
 								className="rounded-full w-10 h-11 bg-black"
 								src="https://heroui.com/images/breathing-app-icon.jpeg"
@@ -58,10 +59,10 @@ const CollectionsGrid = () => {
 							<div className="flex flex-col">
 								<p className="text-tiny text-white/60">Breathing App</p>
 								<p className="text-tiny text-white/60">Get a good night's sleep.</p>
-							</div>
+							</div> */}
 						</div>
-						<Button radius="full" size="sm">
-							Get App
+						<Button radius="sm" size="sm" className="">
+							Khám Phá Ngay
 						</Button>
 					</CardFooter>
 				</Card>
