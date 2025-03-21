@@ -28,7 +28,7 @@ const CollectionGrid = ({ heading, fetchData }) => {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<h2 className="text-2xl font-bold mb-6">{heading}</h2>
-			<div className="grid grid-cols-4 sm:grid-cols-6  gap-8">
+			<div className="grid grid-cols-4 sm:grid-cols-6 gap-6">
 				{data?.data?.collections?.map((collection) => (
 					<CollectionSmallItem
 						key={collection.handle}

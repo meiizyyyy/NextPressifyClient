@@ -5,10 +5,10 @@ import ProductCard from "@/components/ui/ProductCard";
 import { fetchCollectionByHandle } from "@/services/api.services";
 import { Card, CardBody, Skeleton } from "@heroui/react";
 import { useParams } from "next/navigation";
-import React from "react";
+import * as React from "react";
 
-const CollectionPage = () => {
-	const { collectionName } = useParams();
+const CollectionPage = ({ params }) => {
+	const { collectionName } = React.use(params);
 
 	const { data, error, isLoading } = fetchCollectionByHandle(collectionName);
 
@@ -16,12 +16,12 @@ const CollectionPage = () => {
 
 	if (isLoading) {
 		return (
-			<div className="container mx-auto px-4 py-8 w-full">
-				<Skeleton className="h-8 w-64 mb-6 rounded-lg" />
-				<div className="grid grid-cols-4 sm:grid-cols-6 gap-8">
-					{[...Array(8)].map((_, index) => (
+			<div className="container mx-auto px-4 py-14 w-full ">
+				<Skeleton className="h-8 w-64 mb-9 rounded-lg" />
+				<div className="grid grid-cols-4 sm:grid-cols-5 gap-8">
+					{[...Array(10)].map((_, index) => (
 						<div key={index} className="flex flex-col items-center gap-4">
-							<Skeleton className="h-48 w-full rounded-lg" />
+							<Skeleton className="h-72 w-full rounded-lg" />
 							<Skeleton className="h-6 w-32" />
 						</div>
 					))}
@@ -31,7 +31,7 @@ const CollectionPage = () => {
 	}
 
 	return (
-		<div className=" py-14">
+		<div className="py-14">
 			<Card radius="sm" shadow="none">
 				<CardBody>
 					<p className="text-start text-3xl mb-9">Collection: {data.data?.title}</p>
