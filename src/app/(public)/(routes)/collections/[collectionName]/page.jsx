@@ -2,68 +2,71 @@
 
 import CardContentComponents from "@/components/ui/CardContent";
 import ProductCard from "@/components/ui/ProductCard";
-import { fetchCollectionByHandle } from "@/services/api.services";
-import { Button, Card, CardBody, Skeleton } from "@heroui/react";
+import { fetchCollectionByHandle, fetchAllProducts } from "@/services/api.services";
+import { Card, CardBody, Skeleton } from "@heroui/react";
 import { useParams } from "next/navigation";
 import * as React from "react";
-import { useState, useEffect, useCallback, useRef } from "react";
 
 const CollectionPage = ({ params }) => {
 	const { collectionName } = React.use(params);
-	const [productsList, setProductsList] = useState([]);
-	const [cursor, setCursor] = useState(null);
-	const [hasNextPage, setHasNextPage] = useState(false);
-	const [isLoadingMore, setIsLoadingMore] = useState(false);
-	const prevDataRef = useRef(null);
-	const prevCursorRef = useRef(null);
+	const [products, setProducts] = React.useState([]);
+	const [cursor, setCursor] = React.useState(null);
+	const [hasNextPage, setHasNextPage] = React.useState(true);
+	const [isLoadingMore, setIsLoadingMore] = React.useState(false);
+	const loaderRef = React.useRef(null);
 
-	// Fetch dữ liệu với cursor hiện tại
-	const { data, error, isLoading } = fetchCollectionByHandle(collectionName, cursor);
+	const { data, error, isLoading } =
+		collectionName.toLowerCase() === "all"
+			? fetchAllProducts(cursor)
+			: fetchCollectionByHandle(collectionName, cursor);
 
-	// Xử lý dữ liệu trả về từ API
-	useEffect(() => {
-		// Kiểm tra nếu data hoặc cursor đã thay đổi thực sự
-		if (data?.data && (prevDataRef.current !== data || prevCursorRef.current !== cursor)) {
-			// Lưu lại tham chiếu hiện tại
-			prevDataRef.current = data;
-			prevCursorRef.current = cursor;
-
-			// Xử lý dữ liệu
-			if (cursor === null || prevCursorRef.current === null) {
-				// Lần đầu tải: gán dữ liệu
-				setProductsList(data.data.productsList || []);
+	React.useEffect(() => {
+		if (data?.data?.productsList && !isLoading) {
+			if (cursor) {
+				setProducts((prev) => [...prev, ...data.data.productsList]);
 			} else {
-				// Tải thêm: thêm vào danh sách cũ
-				setProductsList((prev) => {
-					const newProducts = data.data.productsList || [];
-					// Kiểm tra trùng lặp
-					const uniqueNewProducts = newProducts.filter(
-						(newProduct) => !prev.some((p) => p.id === newProduct.id),
-					);
-					return [...prev, ...uniqueNewProducts];
-				});
+				setProducts(data.data.productsList);
 			}
-
-			// Cập nhật trạng thái phân trang
-			setHasNextPage(data.data.pageInfo?.hasNextPage || false);
+			setHasNextPage(data.data?.pageInfo?.hasNextPage || false);
 			setIsLoadingMore(false);
 		}
-	}, [data, cursor]);
+	}, [data, isLoading, cursor]);
 
-	// Hàm tải thêm sản phẩm
-	const loadMore = useCallback(() => {
-		if (
-			data?.data?.pageInfo?.endCursor &&
-			hasNextPage &&
-			!isLoadingMore &&
-			data.data.pageInfo.endCursor !== cursor
-		) {
+	const loadMoreProducts = React.useCallback(() => {
+		if (hasNextPage && !isLoadingMore && data?.data?.pageInfo?.endCursor) {
 			setIsLoadingMore(true);
 			setCursor(data.data.pageInfo.endCursor);
 		}
-	}, [data?.data?.pageInfo?.endCursor, hasNextPage, isLoadingMore, cursor]);
+	}, [hasNextPage, isLoadingMore, data]);
 
-	if (isLoading && !productsList.length) {
+	React.useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const target = entries[0];
+				if (target.isIntersecting && hasNextPage && !isLoadingMore) {
+					loadMoreProducts();
+				}
+			},
+			{
+				root: null,
+				rootMargin: "0px",
+				threshold: 0.5,
+			},
+		);
+
+		const currentLoaderRef = loaderRef.current;
+		if (currentLoaderRef) {
+			observer.observe(currentLoaderRef);
+		}
+
+		return () => {
+			if (currentLoaderRef) {
+				observer.unobserve(currentLoaderRef);
+			}
+		};
+	}, [hasNextPage, isLoadingMore, loadMoreProducts]);
+
+	if (isLoading && !cursor) {
 		return (
 			<div className="container mx-auto px-4 py-14 w-full ">
 				<Skeleton className="h-8 w-64 mb-9 rounded-lg" />
@@ -83,29 +86,23 @@ const CollectionPage = ({ params }) => {
 		<div className="py-14">
 			<Card radius="sm" shadow="none">
 				<CardBody>
-					<p className="text-start text-3xl mb-9">Collection: {data?.data?.title}</p>
+					<p className="text-start text-3xl mb-9">Collection: {data.data?.title}</p>
 				</CardBody>
 			</Card>
 
 			<div className="grid grid-cols-2 gap-6 grid-rows-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-				{productsList.map((product) => (
-					<ProductCard product={product} key={product.id} />
+				{products.map((product, index) => (
+					<ProductCard product={product} key={`${product.id}+${index}`} />
 				))}
 			</div>
 
 			{isLoadingMore && (
-				<div className="flex justify-center mt-8">
-					<Skeleton className="h-10 w-32" />
+				<div className="mt-8 flex justify-center items-center py-4">
+					<div className="w-10 h-10 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin"></div>
 				</div>
 			)}
 
-			{hasNextPage && !isLoadingMore && (
-				<div className="flex justify-center mt-8">
-					<Button onPress={loadMore} color="primary" className="px-4 py-2 mb-8">
-						Tải thêm sản phẩm
-					</Button>
-				</div>
-			)}
+			<div ref={loaderRef} className="h-20 mt-4"></div>
 		</div>
 	);
 };

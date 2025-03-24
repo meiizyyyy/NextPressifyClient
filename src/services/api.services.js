@@ -6,10 +6,10 @@ import dotenv from "dotenv";
 dotenv.config();
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-export const fetchAllProducts = (cursor = null) => {
+export const fetchAllProducts = (cursor = null, reverse = null) => {
 	const url = cursor
-		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?cursor=${cursor}`
-		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate`;
+		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?cursor=${cursor}&reverse=${reverse}`
+		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?reverse=${reverse}`;
 
 	return useSWR(url, fetcher);
 };
