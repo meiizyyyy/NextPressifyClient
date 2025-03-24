@@ -83,6 +83,16 @@ export const fetchProductCategoriesCollection = () => {
 	);
 };
 
+export const fetchHomeSliderCollections = () => {
+	return useSWR(
+		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/home-slider-collections`,
+		fetcher,
+		{
+			fallbackData: { data: { collections: [] } },
+		},
+	);
+};
+
 export const fetchCollectionByHandle = (handle, cursor) => {
 	const url = cursor
 		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}?cursor=${cursor}`

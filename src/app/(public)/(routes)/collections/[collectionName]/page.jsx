@@ -86,7 +86,11 @@ const CollectionPage = ({ params }) => {
 		<div className="py-14">
 			<Card radius="sm" shadow="none">
 				<CardBody>
-					<p className="text-start text-3xl mb-9">Collection: {data.data?.title}</p>
+					{data?.data?.title ? (
+						<p className="text-start text-3xl mb-9">Collection: {data?.data?.title}</p>
+					) : (
+						<p className="text-start text-3xl mb-9">Tất cả sản phẩm</p>
+					)}
 				</CardBody>
 			</Card>
 

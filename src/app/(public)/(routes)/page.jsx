@@ -11,6 +11,7 @@ import { fetchAllProducts } from "@/services/api.services";
 import { Button, Card, CardBody, Divider, Link, Skeleton } from "@heroui/react";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import HomePageSliders from "@/components/home/HomePageSliders";
 
 const App = () => {
 	const [cursor, setCursor] = useState(null);
@@ -69,9 +70,7 @@ const App = () => {
 				<Divider />
 				<HomePageCollection />
 
-				<CollectionSlider handle="asus" limit={10} />
-				<CollectionSlider handle="lenovo" />
-				<CollectionSlider handle="laptop-gaming-duoi-30-trieu" limit={10} />
+				<HomePageSliders />
 			</div>
 		</>
 	);

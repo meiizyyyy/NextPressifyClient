@@ -102,7 +102,7 @@ const Header = () => {
 				height={40}
 				className="w-full hidden lg:flex justify-center bg-[#191939]">
 				<Image
-					src="/images/thang_02_pc_gvn_banner_191b3b.jpg"
+					src="/images/thang_02_pc_gvn_banner_191b3b.webp"
 					width={1200}
 					height={10}
 					alt="thang_02_pc_gvn_banner_191b3b"></Image>

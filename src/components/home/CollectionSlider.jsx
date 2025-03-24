@@ -14,7 +14,7 @@ const CollectionSlider = ({ handle = "laptop", limit }) => {
 
 	return (
 		<Card radius="none">
-			<div className="flex flex-col w-full ">
+			<div className="flex flex-col w-full  ">
 				<div className="flex flex-col px-5 pt-5">
 					<div className="flex justify-between items-center">
 						<h2 className="text-2xl font-bold mb-4"> {collection.title}</h2>{" "}
