@@ -6,10 +6,10 @@ import dotenv from "dotenv";
 dotenv.config();
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-export const fetchAllProducts = (cursor = null, reverse = null) => {
+export const fetchAllProducts = (cursor = null, sortKey = "CREATED_AT", reverse = true) => {
 	const url = cursor
-		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?cursor=${cursor}&reverse=${reverse}`
-		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?reverse=${reverse}`;
+		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
+		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?sortKey=${sortKey}&reverse=${reverse}`;
 
 	return useSWR(url, fetcher);
 };
@@ -93,10 +93,10 @@ export const fetchHomeSliderCollections = () => {
 	);
 };
 
-export const fetchCollectionByHandle = (handle, cursor) => {
+export const fetchCollectionByHandle = (handle, cursor = null, sortKey = "CREATED_AT", reverse = true) => {
 	const url = cursor
-		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}?cursor=${cursor}`
-		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}`;
+		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
+		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}?sortKey=${sortKey}&reverse=${reverse}`;
 
 	return useSWR(url, fetcher, {
 		fallbackData: { data: { products: [] } },
