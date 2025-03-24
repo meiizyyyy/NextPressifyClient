@@ -83,12 +83,12 @@ export const fetchProductCategoriesCollection = () => {
 	);
 };
 
-export const fetchCollectionByHandle = (handle) => {
-	return useSWR(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}`,
-		fetcher,
-		{
-			fallbackData: { data: { products: [] } },
-		},
-	);
+export const fetchCollectionByHandle = (handle, cursor) => {
+	const url = cursor
+		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}?cursor=${cursor}`
+		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}`;
+
+	return useSWR(url, fetcher, {
+		fallbackData: { data: { products: [] } },
+	});
 };
