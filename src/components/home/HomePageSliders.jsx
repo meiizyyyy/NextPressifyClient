@@ -24,7 +24,7 @@ const HomePageSliders = () => {
 	return (
 		<div className="space-y-5">
 			{collections.map((collection) => (
-				<CollectionSlider key={collection.handle} handle={collection.handle} limit={10} />
+				<CollectionSlider key={collection.handle} handle={collection.handle}  />
 			))}
 		</div>
 	);

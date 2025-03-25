@@ -1,7 +1,7 @@
 "use client";
 
 import { fetchProductByHandle } from "@/services/api.services";
-import { Button, Card, CardBody, Chip, Image, Skeleton, Tab, Tabs } from "@heroui/react";
+import { BreadcrumbItem, Breadcrumbs, Button, Card, CardBody, Chip, Image, Skeleton, Tab, Tabs } from "@heroui/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
@@ -86,8 +86,20 @@ const ProductDetailPage = () => {
 		: 0;
 
 	return (
-		<div className="flex flex-col gap-10">
-			<div className="container mx-auto px-4 py-14">
+		<div className="flex flex-col gap-10 w-full">
+			<div className="container mx-auto px-4 py-10">
+				<Breadcrumbs className="mb-20">
+					<BreadcrumbItem>
+						<Link href="/">Trang chủ</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem>
+						<Link href="/search">Sản Phẩm</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem>
+						<Link href={`/products/${product.handle}`}>{product.title}</Link>
+					</BreadcrumbItem>
+				</Breadcrumbs>
+
 				<div className="flex flex-col lg:flex-row gap-8 mb-12">
 					<div className="lg:w-1/2">
 						<div className="relative">

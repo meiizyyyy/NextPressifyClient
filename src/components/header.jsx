@@ -132,7 +132,7 @@ const Header = () => {
 											radius="sm"
 											color="default"
 											variant="light"
-											className="">
+											className="font-bold">
 											{item.title}
 										</Button>
 									</NavbarItem>

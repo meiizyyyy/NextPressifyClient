@@ -12,8 +12,11 @@ import {
 	SelectItem,
 	Skeleton,
 	Accordion,
+	BreadcrumbItem,
+	Breadcrumbs,
 	AccordionItem,
 } from "@heroui/react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import * as React from "react";
 
@@ -70,7 +73,6 @@ const CollectionPage = ({ params }) => {
 	const [collectionTitle, setCollectionTitle] = React.useState(null);
 	const loaderRef = React.useRef(null);
 
-    
 	const [selectedPriceRanges, setSelectedPriceRanges] = React.useState([]);
 	const [selectedBrands, setSelectedBrands] = React.useState([]);
 	const [selectedCPUs, setSelectedCPUs] = React.useState([]);
@@ -161,6 +163,17 @@ const CollectionPage = ({ params }) => {
 	if (isLoading && !cursor) {
 		return (
 			<div className="container mx-auto px-4 py-14">
+				<Breadcrumbs className="mb-10">
+					<BreadcrumbItem>
+						<Link href="/">Trang chủ</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem>
+						<Link href="/collections">Danh mục cửa hàng</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem>
+						<Link href={`/collections/${collectionName}`}>{collectionTitle}</Link>
+					</BreadcrumbItem>
+				</Breadcrumbs>
 				<div className="flex flex-col lg:flex-row gap-8">
 					<div className="lg:w-1/4">
 						<Card radius="sm" shadow="none">
@@ -205,7 +218,19 @@ const CollectionPage = ({ params }) => {
 
 	return (
 		<div className="container mx-auto px-4 py-14">
-			<div className="flex flex-col lg:flex-row gap-8">
+			<Breadcrumbs className="mb-10">
+				<BreadcrumbItem>
+					<Link href="#">Trang chủ</Link>
+				</BreadcrumbItem>
+				<BreadcrumbItem>
+					<Link href="/collections">Danh mục cửa hàng</Link>
+				</BreadcrumbItem>
+				<BreadcrumbItem>
+					<Link href={`/collections/${collectionName}`}>{collectionTitle}</Link>
+				</BreadcrumbItem>
+			</Breadcrumbs>
+
+			<div className="flex flex-col lg:flex-row gap-8 mt-8">
 				<div className="lg:w-1/5">
 					<Card radius="sm" shadow="none" className="sticky top-20">
 						<CardBody>

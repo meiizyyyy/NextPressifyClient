@@ -17,7 +17,7 @@ const PublicLayouts = ({ children }) => {
 			{/* <InfomationBar /> */}
 			<Header />
 			{isHomePage && <BannerSlider />}
-			<main className="container mx-auto mt-4 px-3 flex gap-2 justify-center items-center">{children}</main>
+			<main className="container mx-auto mt-4 px-3 flex gap-2 justify-center ">{children}</main>
 			<Footer />
 		</>
 	);

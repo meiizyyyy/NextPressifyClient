@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { AcmeLogo } from "./Header";
 
@@ -175,7 +177,7 @@ const Footer = () => {
 
 							<ul className="mt-6 space-y-4 text-sm">
 								<li>
-									<a href="#" className="text-gray-700 transition hover:opacity-75">
+									<a href="/contact" className="text-gray-700 transition hover:opacity-75">
 										{" "}
 										Contact{" "}
 									</a>

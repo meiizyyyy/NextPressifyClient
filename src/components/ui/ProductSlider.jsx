@@ -10,7 +10,7 @@ import "swiper/css/scrollbar";
 
 const ProductSlider = ({ products, limit }) => {
 	if (products.length === 0) {
-		return <div>Không có sản phẩm nào</div>;
+		return <div className="pl-10 py-5">Không có sản phẩm nào</div>;
 	}
 
 	const productsToShow = limit ? products.slice(0, limit) : products;
@@ -37,7 +37,7 @@ const ProductSlider = ({ products, limit }) => {
 			}}
 			autoplay={({ delay: 5000 }, { disableOnInteraction: true })}
 			spaceBetween={10}
-			className="container h-max">
+			className="container h-max ">
 			{productsToShow.map((product, index) => {
 				return (
 					<SwiperSlide key={product.id} className="py-4">
