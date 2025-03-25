@@ -28,7 +28,7 @@ import LinkComponent from "./ui/Link";
 import InfomationBar from "./InfomationBar";
 import Image from "next/image";
 import SearchBar from "./ui/SearchBar";
-
+import ThemeSwitcher from "./ThemeSwitcher";
 export const AcmeLogo = () => {
 	return (
 		<svg fill="none" height="36" viewBox="0 0 32 32" width="36">
@@ -147,7 +147,9 @@ const Header = () => {
 				<NavbarItem>
 					<CartIcon />
 				</NavbarItem>
-
+				<NavbarItem>
+					<ThemeSwitcher />
+				</NavbarItem>
 				<NavbarItem>
 					<Dropdown placement="bottom-end">
 						<DropdownTrigger>

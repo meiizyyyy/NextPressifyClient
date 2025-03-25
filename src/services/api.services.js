@@ -1,4 +1,4 @@
-// api.services.js
+"use client";
 import useSWR from "swr";
 import axios from "axios";
 import dotenv from "dotenv";

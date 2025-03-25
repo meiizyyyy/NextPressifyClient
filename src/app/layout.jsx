@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono, Open_Sans, Montserrat } from "next/font/google";
 import { Providers } from "./Providers";
 import "./globals.css";
-import Header from "@/components/Header";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -19,8 +18,8 @@ const openSans = Open_Sans({
 });
 
 const montserratSans = Montserrat({
-    variable: "--font-montserrat-sans",
-    subsets: ["latin"],
+	variable: "--font-montserrat-sans",
+	subsets: ["latin"],
 });
 
 export const metadata = {
@@ -30,8 +29,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 	return (
-		<html lang="en">
-			<body className={` ${montserratSans.variable} ${openSans.variable} ${geistSans.variable} ${geistMono.variable} antialiased `}>
+		<html lang="en" className="light" suppressHydrationWarning>
+			<body
+				className={` ${montserratSans.variable} ${openSans.variable} ${geistSans.variable} ${geistMono.variable} antialiased `}>
 				<Providers>{children}</Providers>
 			</body>
 		</html>

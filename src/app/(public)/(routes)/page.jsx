@@ -4,6 +4,7 @@ import BannerSlider from "@/components/home/BannerSlider";
 import CollectionsGrid from "@/components/home/collectionsGrid";
 import CollectionSlider from "@/components/home/CollectionSlider";
 import HomePageCollection from "@/components/home/HomePageCollection";
+import LatestNews from "@/components/home/LatestNews";
 import ProductCardSkeleton from "@/components/skeletons/ProductCardSkeleton";
 import CardContentComponents from "@/components/ui/CardContent";
 import ProductCard from "@/components/ui/ProductCard";
@@ -70,6 +71,7 @@ const App = () => {
 				<Divider />
 
 				<HomePageSliders />
+				<LatestNews />
 				<HomePageCollection />
 			</div>
 		</>
