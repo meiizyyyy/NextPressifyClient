@@ -55,7 +55,7 @@ const BlogDetailPage = () => {
 				<h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
 				<p className="text-gray-600">Khám phá các bài viết mới nhất và thú vị nhất từ chúng tôi</p>
 			</header>
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
 				{blog.articles?.map((article) => (
 					<Link href={`/blogs/${blogHandle}/${article.handle}`} key={article.id}>
 						<ArticleCard article={article} />

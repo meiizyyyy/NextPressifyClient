@@ -6,7 +6,7 @@ const ArticleCard = ({ article }) => {
 	const { title, handle, image, publishedAt, author } = article;
 
 	return (
-		<Card className="h-full hover:shadow-lg transition-shadow duration-300">
+		<Card className="h-full hover:shadow-lg hover:scale-105 transition-all duration-400">
 			<div className="relative w-full ">
 				<Image src={image?.url || "/placeholder.jpg"} alt={title} className="object-cover rounded-t-lg" />
 			</div>

@@ -126,10 +126,12 @@ export const fetchProductByHandle = (handle) => {
 	});
 };
 
-export const fetchNewsBlogs = () => {
-	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/news-blog`;
+export const fetchNewsBlogs = (cursor = null, sortKey = "CREATED_AT", reverse = true) => {
+	const url = cursor
+		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/news-blog?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
+		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/news-blog?sortKey=${sortKey}&reverse=${reverse}`;
 
 	return useSWR(url, fetcher, {
-		fallbackData: { data: [] },
+		fallbackData: { data: { articles: [], pageInfo: { hasNextPage: false, endCursor: null } } },
 	});
 };
