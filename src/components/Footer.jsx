@@ -6,8 +6,8 @@ import { AcmeLogo } from "./Header";
 const Footer = () => {
 	return (
 		<>
-			<footer className="mt-24 bg-white">
-				<div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
+			<footer className="mt-24 bg-white container mx-auto">
+				<div className="mx-auto max-w-screen-xl space-y-8  py-16 sm:px-6 lg:space-y-16 ">
 					<div className="sm:flex sm:items-center sm:justify-between">
 						<div className="text-2xl">
 							<AcmeLogo />

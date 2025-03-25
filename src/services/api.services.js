@@ -125,3 +125,11 @@ export const fetchProductByHandle = (handle) => {
 		fallbackData: { data: { product: null } },
 	});
 };
+
+export const fetchNewsBlogs = () => {
+	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/news-blog`;
+
+	return useSWR(url, fetcher, {
+		fallbackData: { data: [] },
+	});
+};
