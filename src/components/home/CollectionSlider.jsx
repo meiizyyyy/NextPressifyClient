@@ -4,7 +4,7 @@ import { fetchCollectionByHandle } from "@/services/api.services";
 import { Button, Card, Image, Link } from "@heroui/react";
 import ProductCardSkeleton from "../skeletons/ProductCardSkeleton";
 
-const CollectionSlider = ({ handle = "laptop", limit }) => {
+const CollectionSlider = ({ handle = "laptop", limit, additionalText }) => {
 	const { data, error, isLoading } = fetchCollectionByHandle(handle);
 	const collection = data?.data;
 	const productsData = data?.data?.productsList;
@@ -17,7 +17,9 @@ const CollectionSlider = ({ handle = "laptop", limit }) => {
 			<div className="flex flex-col w-full  ">
 				<div className="flex flex-col px-5 pt-5">
 					<div className="flex justify-between items-center">
-						<h2 className="text-2xl font-bold mb-4"> {collection.title}</h2>{" "}
+						<h2 className="text-2xl font-bold mb-4">
+							{additionalText} {collection.title}
+						</h2>{" "}
 						{/* {collection.image.url && (
 							<Image
 								src={collection.image.url}

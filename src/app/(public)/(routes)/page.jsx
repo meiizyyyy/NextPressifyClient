@@ -41,7 +41,7 @@ const App = () => {
 	return (
 		<>
 			<BannerSlider />
-			<div className="h-[10000px] flex flex-col gap-5 min-w-full">
+			<div className="flex flex-col gap-5 min-w-full">
 				<CollectionsGrid />
 
 				{isLoading ? (

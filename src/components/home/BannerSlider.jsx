@@ -34,7 +34,8 @@ const BannerSlider = () => {
 				delay: 5000,
 				disableOnInteraction: false,
 			}}
-			loop={true}>
+			loop={true}
+			className=" mx-auto">
 			{articles.map((article, index) => (
 				<SwiperSlide key={article.id}>
 					<Image
