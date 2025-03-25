@@ -3,28 +3,31 @@ import { Card, CardHeader, CardBody, Image, CardFooter, Button, Badge, Chip, Div
 import Link from "next/link";
 
 const ProductCard = ({ product, isLoading }) => {
-	const { title, vendor, priceRangeV2, images, compareAtPriceRange, createdAt } = product;
+	const { title, vendor, priceRangeV2, images, compareAtPriceRange, createdAt, handle } = product;
 	const price = parseInt(priceRangeV2.maxVariantPrice.amount);
 	const comparePrice = parseInt(compareAtPriceRange?.maxVariantCompareAtPrice.amount);
 	const formattedPrice = new Intl.NumberFormat("vi-VN").format(price);
 	const formattedComparePrice = new Intl.NumberFormat("vi-VN").format(comparePrice);
 
 	return (
-		<Link href={"/"} className="hover:shadow-xl hover:scale-105 transition-all duration-250 h-11/12">
+		<Link
+			href={`/products/${handle}`}
+			className="hover:shadow-xl hover:scale-105 transition-all duration-250 h-11/12">
 			<Card className="pt-4 h-full flex flex-col justify-between" shadow="none" radius="none">
+				{Date.now() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000 && (
+					<Badge color="danger" className="absolute top-2 right-8 z-20" content="New"></Badge>
+				)}
 				<Image
 					radius="md"
 					// height={250}
 					alt="Card background"
-					className="object-cover"
+					className="object-scale-down w-full min-h-72 scale-75"
 					src={images[0].preview.image.url}
 					width="100%"
+					classNames={{ wrapper: "!max-w-full" }}
 				/>
 
-				<CardBody className=" overflow-visible min-h-52 max-h-52 lg:max-h-64 py-2">
-					{Date.now() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000 && (
-						<Badge color="danger" className="absolute top-2 right-4 z-20" content="New"></Badge>
-					)}
+				<CardBody className=" overflow-visible min-h-48 max-h-48 lg:max-h-60 py-2">
 					<small>{vendor} </small>
 					<h4 className="font-bold min-h-20 max-h-20 text-lg line-clamp-4 mb-4">{title}</h4>
 				</CardBody>

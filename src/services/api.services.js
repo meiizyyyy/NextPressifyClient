@@ -102,3 +102,26 @@ export const fetchCollectionByHandle = (handle, cursor = null, sortKey = "CREATE
 		fallbackData: { data: { products: [] } },
 	});
 };
+
+export const searchProducts = (keyword, cursor = null, sortKey = "RELEVANCE", reverse = true) => {
+	const params = new URLSearchParams({
+		keyword,
+		...(cursor && { cursor }),
+		sortKey,
+		reverse,
+	});
+
+	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${
+		process.env.NEXT_PUBLIC_API_VER
+	}/products/search?${params.toString()}`;
+
+	return useSWR(url, fetcher);
+};
+
+export const fetchProductByHandle = (handle) => {
+	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/${handle}`;
+
+	return useSWR(url, fetcher, {
+		fallbackData: { data: { product: null } },
+	});
+};

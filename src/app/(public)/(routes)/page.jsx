@@ -68,9 +68,9 @@ const App = () => {
 					</>
 				)}
 				<Divider />
-				<HomePageCollection />
 
 				<HomePageSliders />
+				<HomePageCollection />
 			</div>
 		</>
 	);
