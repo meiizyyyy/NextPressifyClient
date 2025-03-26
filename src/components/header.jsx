@@ -31,6 +31,7 @@ import SearchBar from "./ui/SearchBar";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import CardDrawer from "./cart/CardDrawer";
 
 export const AcmeLogo = () => {
 	return (
@@ -156,7 +157,7 @@ const Header = () => {
 				</NavbarContent>
 
 				<NavbarItem>
-					<CartIcon />
+					<CardDrawer />
 				</NavbarItem>
 				<NavbarItem>
 					<ThemeSwitcher />
