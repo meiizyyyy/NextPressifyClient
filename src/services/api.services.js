@@ -171,3 +171,14 @@ export const getCustomerDetails = async (accessToken) => {
 		throw error.response?.data || error;
 	}
 };
+
+export const createCart = async () => {
+	try {
+		const res = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/create`,
+		);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};

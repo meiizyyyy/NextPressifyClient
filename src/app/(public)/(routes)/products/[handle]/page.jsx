@@ -1,10 +1,10 @@
 "use client";
 
-import { fetchProductByHandle } from "@/services/api.services";
+import { createCart, fetchProductByHandle } from "@/services/api.services";
 import { BreadcrumbItem, Breadcrumbs, Button, Card, CardBody, Chip, Image, Skeleton, Tab, Tabs } from "@heroui/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CollectionSlider from "@/components/home/CollectionSlider";
 const ProductDetailPage = () => {
 	const { handle } = useParams();
@@ -12,7 +12,7 @@ const ProductDetailPage = () => {
 	const [quantity, setQuantity] = useState(1);
 	const [activeTab, setActiveTab] = useState("description");
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
+	const [cartId, setCartId] = useState(null);
 	const handleQuantityChange = (change) => {
 		const newQuantity = Math.max(1, Math.min(maxQuantity, quantity + change));
 		setQuantity(newQuantity);
@@ -26,10 +26,37 @@ const ProductDetailPage = () => {
 		}
 	};
 
+	useEffect(() => {
+		const cartId = localStorage.getItem("cartId");
+		if (cartId) {
+			setCartId(cartId);
+		}
+	}, []);
+
 	// Xử lý khi thêm vào giỏ hàng
-	const handleAddToCart = () => {
+	const handleAddToCart = async () => {
+		if (!cartId) {
+			const res = await createCart();
+			setCartId(res.cart.id);
+
+			if (res.cart.id) {
+				localStorage.setItem("cartId", res.cart.id);
+				console.log("Đã tạo giỏ hàng mới");
+				console.log(res);
+				console.log(`Đã thêm ${quantity} ${product.title} vào giỏ hàng`);
+			} else {
+				console.log("Có lỗi xảy ra khi tạo giỏ hàng");
+			}
+		} else {
+			console.log("Đã có giỏ hàng, chạy api thêm vào giỏ hàng", cartId);
+		}
+
 		// Thêm logic thêm vào giỏ hàng ở đây
-		console.log(`Đã thêm ${quantity} ${product.title} vào giỏ hàng`);
+		// const res = await addToCart({
+		// 	cartId: cartId,
+		// 	productId: product.id,
+		// 	quantity: quantity,
+		// });
 	};
 
 	if (isLoading) {

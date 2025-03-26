@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import CartIcon from "./cart_icon";
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader } from "@heroui/react";
+import ProductCardOnCart from "./ProductCardOnCart";
 
 const CardDrawer = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,10 @@ const CardDrawer = () => {
 					</DrawerHeader>
 					<DrawerBody>
 						<h4>Hiện không có sản phẩm nào trong giỏ hàng</h4>
+						<ProductCardOnCart />
+						<ProductCardOnCart />
+						<ProductCardOnCart />
+						<ProductCardOnCart />
 					</DrawerBody>
 					<DrawerFooter>
 						<Button color="danger" variant="light" onPress={() => setIsOpen(false)}>
