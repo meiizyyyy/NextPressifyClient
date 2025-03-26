@@ -159,3 +159,15 @@ export const login = async (data) => {
 		throw error.response?.data || error;
 	}
 };
+
+export const getCustomerDetails = async (accessToken) => {
+	try {
+		const res = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/customers/get-customer-details`,
+			{ accessToken },
+		);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};

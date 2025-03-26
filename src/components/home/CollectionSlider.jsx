@@ -8,8 +8,6 @@ const CollectionSlider = ({ handle = "laptop", limit, additionalText }) => {
 	const { data, error, isLoading } = fetchCollectionByHandle(handle);
 	const collection = data?.data;
 	const productsData = data?.data?.productsList;
-	console.log("check data collection slider", productsData);
-
 	if (isLoading) return <ProductCardSkeleton />;
 
 	return (

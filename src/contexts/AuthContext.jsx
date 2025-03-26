@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
 	const router = useRouter();
 
 	useEffect(() => {
-		// Kiểm tra localStorage khi component mount
 		const storedUser = localStorage.getItem("user");
 		const storedToken = localStorage.getItem("accessToken");
 		if (storedUser && storedToken) {
@@ -20,11 +19,11 @@ export const AuthProvider = ({ children }) => {
 		setLoading(false);
 	}, []);
 
-	const login = (userData) => {
-		setUser(userData.customer);
-		localStorage.setItem("user", JSON.stringify(userData.customer));
-		localStorage.setItem("accessToken", userData.accessToken);
-		localStorage.setItem("tokenExpiresAt", userData.expiresAt);
+	const login = (userData, accessToken, expiresAt) => {
+		setUser(userData.customer.data.customer);
+		localStorage.setItem("user", JSON.stringify(userData.customer.data.customer));
+		localStorage.setItem("accessToken", accessToken);
+		localStorage.setItem("tokenExpiresAt", expiresAt);
 		router.push("/");
 	};
 
@@ -33,7 +32,6 @@ export const AuthProvider = ({ children }) => {
 		localStorage.removeItem("user");
 		localStorage.removeItem("accessToken");
 		localStorage.removeItem("tokenExpiresAt");
-		router.push("/sign-in");
 	};
 
 	return <AuthContext.Provider value={{ user, login, logout, loading }}>{!loading && children}</AuthContext.Provider>;

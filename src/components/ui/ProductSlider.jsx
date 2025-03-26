@@ -15,7 +15,6 @@ const ProductSlider = ({ products, limit }) => {
 
 	const productsToShow = limit ? products.slice(0, limit) : products;
 
-	console.log("check data slider", products);
 
 	return (
 		<Swiper

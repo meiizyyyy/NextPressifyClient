@@ -181,7 +181,7 @@ const SignUpPage = (props) => {
 							variant="underlined"
 						/>
 						<Checkbox isRequired className="py-4" size="sm">
-							I agree with the&nbsp;
+							Tôi đồng ý với&nbsp;
 							<Link className="relative z-[1]" href="#" size="sm">
 								Điều khoản sử dụng
 							</Link>

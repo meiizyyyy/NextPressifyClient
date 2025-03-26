@@ -4,7 +4,7 @@ import Aurora from "@/components/ui/Aurora";
 import { Button, Input, Checkbox, Link, Form, Divider, addToast } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import React from "react";
-import { login } from "@/services/api.services";
+import { getCustomerDetails, login } from "@/services/api.services";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const AcmeIcon = ({ size = 32, width, height, ...props }) => (
@@ -36,12 +36,16 @@ const SignInPage = (props) => {
 			const res = await login(data);
 
 			if (res.status === "success") {
+				const accessToken = res.token;
+				const expiresAt = res.expiresAt;
+				const customerDetails = await getCustomerDetails(accessToken);
+
 				addToast({
 					title: "Đăng Nhập Thành Công",
-					description: res.message,
+					description: "Chào mừng trở lại",
 					color: "success",
 				});
-				authLogin(res.data);
+				authLogin(customerDetails, accessToken, expiresAt);
 			} else {
 				addToast({
 					title: "Đăng Nhập Thất Bại",

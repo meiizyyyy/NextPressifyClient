@@ -70,6 +70,8 @@ const Header = () => {
 		"Log Out",
 	];
 
+	console.log("Check user context", user);
+
 	const handleLoginClick = () => {
 		router.push("/sign-in");
 	};
