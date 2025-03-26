@@ -135,3 +135,27 @@ export const fetchNewsBlogs = (cursor = null, sortKey = "CREATED_AT", reverse = 
 		fallbackData: { data: { articles: [], pageInfo: { hasNextPage: false, endCursor: null } } },
 	});
 };
+
+export const signUp = async (data) => {
+	try {
+		const res = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/customers/register`,
+			data,
+		);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error.message;
+	}
+};
+
+export const login = async (data) => {
+	try {
+		const res = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/customers/login`,
+			data,
+		);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};

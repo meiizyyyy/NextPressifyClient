@@ -29,6 +29,9 @@ import InfomationBar from "./InfomationBar";
 import Image from "next/image";
 import SearchBar from "./ui/SearchBar";
 import ThemeSwitcher from "./ThemeSwitcher";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+
 export const AcmeLogo = () => {
 	return (
 		<svg fill="none" height="36" viewBox="0 0 32 32" width="36">
@@ -43,6 +46,8 @@ export const AcmeLogo = () => {
 };
 
 const Header = () => {
+	const { user, logout } = useAuth();
+	const router = useRouter();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const { data: headerMainData, error: headerMainError, isLoading: headerMainLoading } = fetchHeaderMainMenu();
@@ -64,6 +69,10 @@ const Header = () => {
 		"Help & Feedback",
 		"Log Out",
 	];
+
+	const handleLoginClick = () => {
+		router.push("/sign-in");
+	};
 
 	return (
 		<>
@@ -151,35 +160,37 @@ const Header = () => {
 					<ThemeSwitcher />
 				</NavbarItem>
 				<NavbarItem>
-					<Dropdown placement="bottom-end">
-						<DropdownTrigger>
-							<Avatar
-								isBordered
-								as="button"
-								className="transition-transform"
-								color="secondary"
-								name="Jason Hughes"
-								size="sm"
-								src=""
-							/>
-						</DropdownTrigger>
-						<DropdownMenu aria-label="Profile Actions" variant="flat">
-							<DropdownItem key="profile" className="h-14 gap-2">
-								<p className="font-semibold">Signed in as</p>
-								<p className="font-semibold">zoey@example.com</p>
-							</DropdownItem>
-							<DropdownItem key="cart">My Cart</DropdownItem>
-							<DropdownItem key="settings">My Settings</DropdownItem>
-							<DropdownItem key="team_settings">Team Settings</DropdownItem>
-							<DropdownItem key="analytics">Analytics</DropdownItem>
-							<DropdownItem key="system">System</DropdownItem>
-							<DropdownItem key="configurations">Configurations</DropdownItem>
-							<DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-							<DropdownItem key="logout" color="danger">
-								Log Out
-							</DropdownItem>
-						</DropdownMenu>
-					</Dropdown>
+					{user ? (
+						<Dropdown placement="bottom-end">
+							<DropdownTrigger>
+								<Avatar
+									isBordered
+									as="button"
+									className="transition-transform"
+									color="secondary"
+									name={`${user.firstName} ${user.lastName}`}
+									size="sm"
+									src=""
+								/>
+							</DropdownTrigger>
+							<DropdownMenu aria-label="Profile Actions" variant="flat">
+								<DropdownItem key="profile" className="h-14 gap-2">
+									<p className="font-semibold">Đăng nhập với</p>
+									<p className="font-semibold">{user.email}</p>
+								</DropdownItem>
+								<DropdownItem key="cart">Giỏ hàng của tôi</DropdownItem>
+								<DropdownItem key="settings">Cài đặt tài khoản</DropdownItem>
+								<DropdownItem key="orders">Đơn hàng của tôi</DropdownItem>
+								<DropdownItem key="logout" color="danger" onPress={logout}>
+									Đăng xuất
+								</DropdownItem>
+							</DropdownMenu>
+						</Dropdown>
+					) : (
+						<Button isIconOnly radius="full" variant="light" onPress={handleLoginClick}>
+							<Avatar name="User" size="sm" />
+						</Button>
+					)}
 				</NavbarItem>
 				<NavbarMenu>
 					{headerCollectionLoading ? (

@@ -1,9 +1,13 @@
 "use client";
 
-import { Button, Input, Checkbox, Link, Form, Divider } from "@heroui/react";
+import { Button, Input, Checkbox, Link, Form, Divider, useDisclosure, addToast } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import React from "react";
 import Aurora from "@/components/ui/Aurora";
+import { signUp } from "@/services/api.services";
+import { useRouter } from "next/navigation";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/react";
+
 export const AcmeIcon = ({ size = 32, width, height, ...props }) => (
 	<svg fill="none" height={size || height} viewBox="0 0 32 32" width={size || width} {...props}>
 		<path
@@ -18,9 +22,72 @@ export const AcmeIcon = ({ size = 32, width, height, ...props }) => (
 const SignUpPage = (props) => {
 	const [isVisible, setIsVisible] = React.useState(false);
 	const [isConfirmVisible, setIsConfirmVisible] = React.useState(false);
+	const [isLoading, setIsLoading] = React.useState(false);
+
+	const router = useRouter();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const toggleVisibility = () => setIsVisible(!isVisible);
 	const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
+
+	const onSubmit = async (e) => {
+		e.preventDefault();
+
+		setIsLoading(true);
+
+		try {
+			const formData = new FormData(e.currentTarget);
+			const data = Object.fromEntries(formData);
+
+			if (data.password !== data.password_confirmation) {
+				addToast({
+					title: "Đăng Ký Thất Bại",
+					description: "Mật khẩu xác nhận không khớp",
+					color: "danger",
+				});
+				return;
+			}
+
+			const customerData = {
+				firstName: data.firstName,
+				lastName: data.lastName,
+				email: data.email,
+				phone: data.phone,
+				password: data.password,
+				password_confirmation: data.password_confirmation,
+			};
+			console.log(customerData);
+			const res = await signUp(customerData);
+
+			if (res.status === "success") {
+				addToast({
+					title: "Đăng Ký Thành Công",
+					description: res.message || res.data.message || "Đăng ký thành công",
+					color: "success",
+				});
+				onOpen();
+			} else {
+				addToast({
+					title: "Đăng Ký Thất Bại",
+					description: res.message || res.errors || "Có lỗi xảy ra trong quá trình đăng ký",
+					color: "danger",
+				});
+			}
+		} catch (error) {
+			addToast({
+				title: "Đăng Ký Thất Bại",
+				description: error.errors || error.message || "Có lỗi xảy ra, vui lòng thử lại",
+				color: "danger",
+			});
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleSuccess = () => {
+		onClose();
+		router.push("/sign-in");
+	};
 
 	return (
 		<div className="w-full h-full ">
@@ -34,13 +101,28 @@ const SignUpPage = (props) => {
 						<p className="text-xl font-medium">Chào mừng đến với Nextifyyyy</p>
 						<p className="text-small text-default-500 mt-2">Đăng ký để tiếp tục</p>
 					</div>
-					<form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+					<Form className="flex flex-col gap-4" onSubmit={onSubmit}>
 						<Input
 							isRequired
-							label="Tên tài khoản"
+							label="Tên"
 							labelPlacement="outside"
-							name="username"
-							placeholder="Nhập tên tài khoản"
+							name="firstName"
+							type="text"
+							variant="underlined"
+						/>
+						<Input
+							isRequired
+							label="Họ và tên đệm"
+							labelPlacement="outside"
+							name="lastName"
+							type="text"
+							variant="underlined"
+						/>
+						<Input
+							isRequired
+							label="Số điện thoại"
+							labelPlacement="outside"
+							name="phone"
 							type="text"
 							variant="underlined"
 						/>
@@ -49,7 +131,6 @@ const SignUpPage = (props) => {
 							label="Email"
 							labelPlacement="outside"
 							name="email"
-							placeholder="Nhập email"
 							type="email"
 							variant="underlined"
 						/>
@@ -73,7 +154,6 @@ const SignUpPage = (props) => {
 							label="Mật khẩu"
 							labelPlacement="outside"
 							name="password"
-							placeholder="Nhập mật khẩu"
 							type={isVisible ? "text" : "password"}
 							variant="underlined"
 						/>
@@ -96,8 +176,7 @@ const SignUpPage = (props) => {
 							}
 							label="Xác nhận mật khẩu"
 							labelPlacement="outside"
-							name="confirmPassword"
-							placeholder="Xác nhận mật khẩu"
+							name="password_confirmation"
 							type={isConfirmVisible ? "text" : "password"}
 							variant="underlined"
 						/>
@@ -111,10 +190,10 @@ const SignUpPage = (props) => {
 								Điều khoản bảo mật
 							</Link>
 						</Checkbox>
-						<Button color="primary" type="submit">
+						<Button color="primary" type="submit" isLoading={isLoading} className="w-full">
 							Đăng ký
 						</Button>
-					</form>
+					</Form>
 					<p className="text-center text-small">
 						Đã có tài khoản?&nbsp;
 						<Link href="/sign-in" size="sm">
@@ -123,6 +202,20 @@ const SignUpPage = (props) => {
 					</p>
 				</div>
 			</div>
+
+			<Modal isOpen={isOpen} onClose={onClose}>
+				<ModalContent>
+					<ModalHeader>Đăng ký thành công!</ModalHeader>
+					<ModalBody>
+						<p>Tài khoản của bạn đã được tạo thành công. Vui lòng đăng nhập để tiếp tục.</p>
+					</ModalBody>
+					<ModalFooter>
+						<Button color="primary" onPress={handleSuccess}>
+							Đăng nhập
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</div>
 	);
 };

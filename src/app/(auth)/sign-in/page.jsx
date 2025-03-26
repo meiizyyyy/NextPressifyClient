@@ -1,10 +1,11 @@
 "use client";
 
 import Aurora from "@/components/ui/Aurora";
-import { Button, Input, Checkbox, Link, Form, Divider } from "@heroui/react";
+import { Button, Input, Checkbox, Link, Form, Divider, addToast } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import React from "react";
-
+import { login } from "@/services/api.services";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const AcmeIcon = ({ size = 32, width, height, ...props }) => (
 	<svg fill="none" height={size || height} viewBox="0 0 32 32" width={size || width} {...props}>
@@ -19,21 +20,55 @@ export const AcmeIcon = ({ size = 32, width, height, ...props }) => (
 
 const SignInPage = (props) => {
 	const [isVisible, setIsVisible] = React.useState(false);
+	const [isLoading, setIsLoading] = React.useState(false);
+	const { login: authLogin } = useAuth();
 
 	const toggleVisibility = () => setIsVisible(!isVisible);
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log("handleSubmit");
+		setIsLoading(true);
+
+		try {
+			const formData = new FormData(event.currentTarget);
+			const data = Object.fromEntries(formData);
+			delete data.remember;
+			const res = await login(data);
+
+			if (res.status === "success") {
+				addToast({
+					title: "Đăng Nhập Thành Công",
+					description: res.message,
+					color: "success",
+				});
+				authLogin(res.data);
+			} else {
+				addToast({
+					title: "Đăng Nhập Thất Bại",
+					description: res.message || "Có lỗi xảy ra trong quá trình đăng nhập",
+					color: "danger",
+				});
+			}
+		} catch (error) {
+			addToast({
+				title: "Đăng Nhập Thất Bại",
+				description: error.message || "Có lỗi xảy ra, vui lòng thử lại",
+				color: "danger",
+			});
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
 		<div className="w-full h-full ">
-			<Aurora colorStops={["#3A29FF", "#FF94B4", "#FF3232"]} blend={0.5} amplitude={1.0} speed={0.5} />   
+			<Aurora colorStops={["#3A29FF", "#FF94B4", "#FF3232"]} blend={0.5} amplitude={1.0} speed={0.5} />
 			<div className="flex h-full w-full items-center justify-center fixed inset-0">
 				<div className="flex w-full max-w-lg flex-col gap-4 rounded-large">
 					<div className="flex flex-col items-center pb-6">
-						<Link href="/" color="foreground"><AcmeIcon size={60}  /></Link>
+						<Link href="/" color="foreground">
+							<AcmeIcon size={60} />
+						</Link>
 						<p className="text-xl font-medium">Chào mừng trở lại</p>
 						<p className="text-small text-default-500 mt-2">Đăng nhập để tiếp tục</p>
 					</div>
@@ -79,7 +114,7 @@ const SignInPage = (props) => {
 								Quên mật khẩu?
 							</Link>
 						</div>
-						<Button className="w-full" color="primary" type="submit">
+						<Button className="w-full" color="primary" type="submit" isLoading={isLoading}>
 							Đăng nhập
 						</Button>
 					</Form>
