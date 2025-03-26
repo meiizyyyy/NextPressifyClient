@@ -71,8 +71,8 @@ const App = () => {
 				<Divider />
 
 				<HomePageSliders />
-				<LatestNews />
 				<HomePageCollection />
+				<LatestNews />
 			</div>
 		</>
 	);
