@@ -182,3 +182,15 @@ export const createCart = async () => {
 		throw error.response?.data || error;
 	}
 };
+
+export const addToCart = async (data) => {
+	try {
+		const res = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/add-to-cart`,
+			data,
+		);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};

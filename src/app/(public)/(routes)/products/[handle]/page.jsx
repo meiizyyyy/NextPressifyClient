@@ -1,11 +1,24 @@
 "use client";
 
-import { createCart, fetchProductByHandle } from "@/services/api.services";
-import { BreadcrumbItem, Breadcrumbs, Button, Card, CardBody, Chip, Image, Skeleton, Tab, Tabs } from "@heroui/react";
+import { addToCart, createCart, fetchProductByHandle } from "@/services/api.services";
+import {
+	addToast,
+	BreadcrumbItem,
+	Breadcrumbs,
+	Button,
+	Card,
+	CardBody,
+	Chip,
+	Image,
+	Skeleton,
+	Tab,
+	Tabs,
+} from "@heroui/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CollectionSlider from "@/components/home/CollectionSlider";
+
 const ProductDetailPage = () => {
 	const { handle } = useParams();
 	const { data, error, isLoading } = fetchProductByHandle(handle);
@@ -13,6 +26,7 @@ const ProductDetailPage = () => {
 	const [activeTab, setActiveTab] = useState("description");
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 	const [cartId, setCartId] = useState(null);
+	const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
 	const handleQuantityChange = (change) => {
 		const newQuantity = Math.max(1, Math.min(maxQuantity, quantity + change));
 		setQuantity(newQuantity);
@@ -35,28 +49,53 @@ const ProductDetailPage = () => {
 
 	// Xử lý khi thêm vào giỏ hàng
 	const handleAddToCart = async () => {
+		setIsAddToCartLoading(true);
+
 		if (!cartId) {
 			const res = await createCart();
 			setCartId(res.cart.id);
 
-			if (res.cart.id) {
+			if (!res.cart.id) {
+				addToast({
+					title: "Tạo mới giỏ hàng",
+					description: "Có lỗi xảy ra khi tạo giỏ hàng",
+					color: "danger",
+				});
+				return;
+			} else {
 				localStorage.setItem("cartId", res.cart.id);
 				console.log("Đã tạo giỏ hàng mới");
 				console.log(res);
 				console.log(`Đã thêm ${quantity} ${product.title} vào giỏ hàng`);
-			} else {
-				console.log("Có lỗi xảy ra khi tạo giỏ hàng");
+
+				addToast({
+					title: "Tạo mới giỏ hàng",
+					description: "Tạo mới giỏ hàng thành công",
+					color: "success",
+				});
 			}
-		} else {
-			console.log("Đã có giỏ hàng, chạy api thêm vào giỏ hàng", cartId);
 		}
 
-		// Thêm logic thêm vào giỏ hàng ở đây
-		// const res = await addToCart({
-		// 	cartId: cartId,
-		// 	productId: product.id,
-		// 	quantity: quantity,
-		// });
+		const res = await addToCart({
+			cartId: cartId,
+			variantId: variantId,
+			quantity: quantity,
+		});
+
+		if (res.data.success === true) {
+			addToast({
+				title: "Thêm vào giỏ hàng",
+				description: `Đã thêm ${quantity} ${product.title} vào giỏ hàng`,
+				color: "success",
+			});
+		} else {
+			addToast({
+				title: "Thêm vào giỏ hàng",
+				description: "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng",
+				color: "danger",
+			});
+		}
+		setIsAddToCartLoading(false);
 	};
 
 	if (isLoading) {
@@ -97,6 +136,8 @@ const ProductDetailPage = () => {
 
 	const product = data.data.product;
 	const maxQuantity = product.totalInventory;
+	const variantId = product.variants.edges[0].node.id;
+
 	const price = product.priceRangeV2.maxVariantPrice.amount
 		? new Intl.NumberFormat("vi-VN").format(parseInt(product.priceRangeV2.maxVariantPrice.amount))
 		: "";
@@ -215,6 +256,7 @@ const ProductDetailPage = () => {
 							color="danger"
 							size="lg"
 							className="w-full mb-6"
+							isLoading={isAddToCartLoading}
 							spinner={
 								<svg
 									className="animate-spin h-5 w-5 text-current"
@@ -236,7 +278,7 @@ const ProductDetailPage = () => {
 									/>
 								</svg>
 							}
-							isDisabled={quantity > product.totalInventory + 1}
+							isDisabled={quantity > product.totalInventory + 1 || isAddToCartLoading}
 							onPress={handleAddToCart}>
 							Thêm vào giỏ hàng
 						</Button>
