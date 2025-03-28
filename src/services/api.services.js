@@ -184,6 +184,17 @@ export const createCart = async () => {
 	}
 };
 
+export const getCart = async (cartId) => {
+	try {
+		const res = await axios.get(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/get-cart?cartId=${cartId}`,
+		);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
+
 export const addToCart = async (data) => {
 	try {
 		const res = await axios.post(
