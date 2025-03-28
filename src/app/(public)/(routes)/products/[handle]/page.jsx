@@ -278,9 +278,11 @@ const ProductDetailPage = () => {
 									/>
 								</svg>
 							}
-							isDisabled={quantity > product.totalInventory + 1 || isAddToCartLoading}
+							isDisabled={
+								quantity > product.totalInventory + 1 || isAddToCartLoading || maxQuantity === 0
+							}
 							onPress={handleAddToCart}>
-							Thêm vào giỏ hàng
+							{maxQuantity === 0 ? "Hết hàng" : "Thêm vào giỏ hàng"}
 						</Button>
 
 						{product.tags && product.tags.length > 0 && (
