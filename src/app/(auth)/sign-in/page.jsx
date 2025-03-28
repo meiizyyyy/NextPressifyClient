@@ -21,6 +21,7 @@ export const AcmeIcon = ({ size = 32, width, height, ...props }) => (
 const SignInPage = (props) => {
 	const [isVisible, setIsVisible] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
+	const [isRememberMe, setIsRememberMe] = React.useState(false);
 	const { login: authLogin } = useAuth();
 
 	const toggleVisibility = () => setIsVisible(!isVisible);
@@ -32,7 +33,6 @@ const SignInPage = (props) => {
 		try {
 			const formData = new FormData(event.currentTarget);
 			const data = Object.fromEntries(formData);
-			delete data.remember;
 			const res = await login(data);
 
 			if (res.status === "success") {
@@ -45,7 +45,7 @@ const SignInPage = (props) => {
 					description: "Chào mừng trở lại",
 					color: "success",
 				});
-				authLogin(customerDetails, accessToken, expiresAt);
+				authLogin(customerDetails, accessToken, expiresAt, isRememberMe);
 			} else {
 				addToast({
 					title: "Đăng Nhập Thất Bại",
@@ -111,7 +111,11 @@ const SignInPage = (props) => {
 						/>
 
 						<div className="flex w-full items-center justify-between px-1 py-2">
-							<Checkbox name="remember" size="sm">
+							<Checkbox
+								name="remember"
+								size="sm"
+								isSelected={isRememberMe}
+								onValueChange={setIsRememberMe}>
 								Giữ tôi đăng nhập
 							</Checkbox>
 							<Link className="text-default-500" href="#" size="sm">

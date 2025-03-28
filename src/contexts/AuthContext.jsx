@@ -13,17 +13,34 @@ export const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		const storedUser = localStorage.getItem("user");
 		const storedToken = localStorage.getItem("accessToken");
-		if (storedUser && storedToken) {
+		const storedExpiresAt = localStorage.getItem("expiresAt");
+
+		if (!storedToken) {
+			const sessionToken = sessionStorage.getItem("accessToken");
+			const sessionExpiresAt = sessionStorage.getItem("expiresAt");
+
+			if (sessionToken && sessionExpiresAt) {
+				setUser(JSON.parse(storedUser));
+			}
+		} else if (storedUser && storedToken && storedExpiresAt) {
 			setUser(JSON.parse(storedUser));
 		}
 		setLoading(false);
 	}, []);
 
-	const login = (userData, accessToken, expiresAt) => {
+	const login = (userData, accessToken, expiresAt, isRememberMe) => {
 		setUser(userData.customer.data.customer);
+
 		localStorage.setItem("user", JSON.stringify(userData.customer.data.customer));
-		localStorage.setItem("accessToken", accessToken);
-		localStorage.setItem("tokenExpiresAt", expiresAt);
+
+		if (isRememberMe == false) {
+			sessionStorage.setItem("accessToken", accessToken);
+			sessionStorage.setItem("expiresAt", expiresAt);
+		} else {
+			localStorage.setItem("accessToken", accessToken);
+			localStorage.setItem("expiresAt", expiresAt);
+		}
+
 		router.push("/");
 	};
 
@@ -31,7 +48,9 @@ export const AuthProvider = ({ children }) => {
 		setUser(null);
 		localStorage.removeItem("user");
 		localStorage.removeItem("accessToken");
-		localStorage.removeItem("tokenExpiresAt");
+		localStorage.removeItem("expiresAt");
+		sessionStorage.removeItem("accessToken");
+		sessionStorage.removeItem("expiresAt");
 	};
 
 	return <AuthContext.Provider value={{ user, login, logout, loading }}>{!loading && children}</AuthContext.Provider>;

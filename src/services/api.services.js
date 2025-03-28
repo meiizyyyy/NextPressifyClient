@@ -149,6 +149,7 @@ export const signUp = async (data) => {
 };
 
 export const login = async (data) => {
+	delete data.remember;
 	try {
 		const res = await axios.post(
 			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/customers/login`,
