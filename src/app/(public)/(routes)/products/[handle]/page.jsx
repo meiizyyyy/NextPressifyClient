@@ -1,6 +1,6 @@
 "use client";
 
-import { addToCart, createCart, fetchProductByHandle } from "@/services/api.services";
+import { addToCart, createCart, fetchProductByHandle, customerCartIdUpdate } from "@/services/api.services";
 import {
 	addToast,
 	BreadcrumbItem,
@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CollectionSlider from "@/components/home/CollectionSlider";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ProductDetailPage = () => {
 	const { handle } = useParams();
@@ -27,6 +28,7 @@ const ProductDetailPage = () => {
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 	const [cartId, setCartId] = useState(null);
 	const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
+	const { user } = useAuth();
 	const handleQuantityChange = (change) => {
 		const newQuantity = Math.max(1, Math.min(maxQuantity, quantity + change));
 		setQuantity(newQuantity);
@@ -41,32 +43,40 @@ const ProductDetailPage = () => {
 	};
 
 	useEffect(() => {
-		const cartId = localStorage.getItem("cartId");
-		if (cartId) {
-			setCartId(cartId);
+		const storedCartId = localStorage.getItem("cartId");
+		if (storedCartId) {
+			setCartId(storedCartId);
 		}
 	}, []);
 
 	// Xử lý khi thêm vào giỏ hàng
 	const handleAddToCart = async () => {
-		setIsAddToCartLoading(true);
+		try {
+			setIsAddToCartLoading(true);
+			let currentCartId = cartId;
 
-		if (!cartId) {
-			const res = await createCart();
-			setCartId(res.cart.id);
+			if (!currentCartId) {
+				const createCartRes = await createCart();
+				if (!createCartRes.cart.id) {
+					addToast({
+						title: "Tạo mới giỏ hàng",
+						description: "Có lỗi xảy ra khi tạo giỏ hàng",
+						color: "danger",
+					});
+					return;
+				}
 
-			if (!res.cart.id) {
-				addToast({
-					title: "Tạo mới giỏ hàng",
-					description: "Có lỗi xảy ra khi tạo giỏ hàng",
-					color: "danger",
-				});
-				return;
-			} else {
-				localStorage.setItem("cartId", res.cart.id);
-				console.log("Đã tạo giỏ hàng mới");
-				console.log(res);
-				console.log(`Đã thêm ${quantity} ${product.title} vào giỏ hàng`);
+				currentCartId = createCartRes.cart.id;
+				setCartId(currentCartId);
+				localStorage.setItem("cartId", currentCartId);
+
+				if (user) {
+					await customerCartIdUpdate({
+						customerId: user.id,
+						key: "cartId",
+						value: currentCartId,
+					});
+				}
 
 				addToast({
 					title: "Tạo mới giỏ hàng",
@@ -74,28 +84,40 @@ const ProductDetailPage = () => {
 					color: "success",
 				});
 			}
-		}
 
-		const res = await addToCart({
-			cartId: cartId,
-			variantId: variantId,
-			quantity: quantity,
-		});
+			// Đảm bảo có cartId trước khi thêm vào giỏ hàng
+			if (!currentCartId) {
+				throw new Error("Không tìm thấy ID giỏ hàng");
+			}
 
-		if (res.data.success === true) {
-			addToast({
-				title: "Thêm vào giỏ hàng",
-				description: `Đã thêm ${quantity} ${product.title} vào giỏ hàng`,
-				color: "success",
+			const addToCartRes = await addToCart({
+				cartId: currentCartId,
+				variantId: variantId,
+				quantity: quantity,
 			});
-		} else {
+
+			if (addToCartRes.data.success === true) {
+				addToast({
+					title: "Thêm vào giỏ hàng",
+					description: `Đã thêm ${quantity} ${product.title} vào giỏ hàng`,
+					color: "success",
+				});
+			} else {
+				addToast({
+					title: "Thêm vào giỏ hàng",
+					description: "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng",
+					color: "danger",
+				});
+			}
+		} catch (error) {
 			addToast({
-				title: "Thêm vào giỏ hàng",
-				description: "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng",
+				title: "Lỗi",
+				description: error.message || "Có lỗi xảy ra",
 				color: "danger",
 			});
+		} finally {
+			setIsAddToCartLoading(false);
 		}
-		setIsAddToCartLoading(false);
 	};
 
 	if (isLoading) {

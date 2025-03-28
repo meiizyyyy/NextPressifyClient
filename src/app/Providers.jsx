@@ -5,6 +5,7 @@ import { HeroUIProvider } from "@heroui/react";
 import { useRouter, useNavigate } from "next/navigation";
 import { ToastProvider } from "@heroui/toast";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { CartProvider } from "@/contexts/CartContext";
 
 export function Providers({ children }) {
 	const router = useRouter();
@@ -37,7 +38,9 @@ export function Providers({ children }) {
 				className="z-50"
 			/>
 			<NextThemesProvider attribute="class">
-				<AuthProvider>{children}</AuthProvider>
+				<AuthProvider>
+					<CartProvider>{children}</CartProvider>
+				</AuthProvider>
 			</NextThemesProvider>
 		</HeroUIProvider>
 	);

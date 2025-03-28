@@ -184,15 +184,24 @@ export const createCart = async () => {
 	}
 };
 
-export const getCart = async (cartId) => {
+export const customerCartIdUpdate = async (cartId, customerId) => {
 	try {
-		const res = await axios.get(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/get-cart?cartId=${cartId}`,
+		const res = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/customer-cart-id-update`,
+			{ cartId, customerId },
 		);
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error;
 	}
+};
+
+export const getCart = async (cartId) => {
+	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/get-cart?cartId=${cartId}`;
+
+	return useSWR(url, fetcher, {
+		fallbackData: {},
+	});
 };
 
 export const addToCart = async (data) => {

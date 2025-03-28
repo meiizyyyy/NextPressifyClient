@@ -18,6 +18,7 @@ import {
 	Button,
 	Progress,
 	Skeleton,
+	addToast,
 } from "@heroui/react";
 import React, { useEffect, useState } from "react";
 import CartIcon from "@components/cart/cart_icon";
@@ -75,6 +76,16 @@ const Header = () => {
 
 	const handleLoginClick = () => {
 		router.push("/sign-in");
+	};
+
+	const handleLogout = () => {
+		logout();
+
+		addToast({
+			title: "Đăng xuất thành công!",
+			description: "Hẹn gặp lại!",
+			color: "danger",
+		});
 	};
 
 	return (
@@ -184,7 +195,7 @@ const Header = () => {
 								<DropdownItem key="cart">Giỏ hàng của tôi</DropdownItem>
 								<DropdownItem key="settings">Cài đặt tài khoản</DropdownItem>
 								<DropdownItem key="orders">Đơn hàng của tôi</DropdownItem>
-								<DropdownItem key="logout" color="danger" onPress={logout}>
+								<DropdownItem key="logout" color="danger" onPress={handleLogout}>
 									Đăng xuất
 								</DropdownItem>
 							</DropdownMenu>

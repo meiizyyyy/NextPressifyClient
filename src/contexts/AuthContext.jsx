@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { customerCartIdUpdate } from "@/services/api.services";
 
 const AuthContext = createContext();
 
@@ -28,10 +29,26 @@ export const AuthProvider = ({ children }) => {
 		setLoading(false);
 	}, []);
 
-	const login = (userData, accessToken, expiresAt, isRememberMe) => {
-		setUser(userData.customer.data.customer);
+	const login = (customerDetails, accessToken, expiresAt, isRememberMe) => {
+		const customer = customerDetails.customer.data.customer;
+		setUser(customer);
 
-		localStorage.setItem("user", JSON.stringify(userData.customer.data.customer));
+		// Xử lý cartId
+		if (customer.metafield?.key === "cartId") {
+			// Nếu có cartId trong metafield, sử dụng nó
+			localStorage.setItem("cartId", customer.metafield.value);
+		} else if (localStorage.getItem("cartId")) {
+			// Nếu không có cartId trong metafield, sử dụng cartId trong localStorage và thêm vào metafield
+			customer.metafield = {
+				key: "cartId",
+				value: localStorage.getItem("cartId"),
+			};
+
+			customerCartIdUpdate(customer.metafield.value, customer.id);
+		} else {
+		}
+
+		localStorage.setItem("user", JSON.stringify(customer));
 
 		if (isRememberMe == false) {
 			sessionStorage.setItem("accessToken", accessToken);
@@ -47,6 +64,7 @@ export const AuthProvider = ({ children }) => {
 	const logout = () => {
 		setUser(null);
 		localStorage.removeItem("user");
+		localStorage.removeItem("cartId");
 		localStorage.removeItem("accessToken");
 		localStorage.removeItem("expiresAt");
 		sessionStorage.removeItem("accessToken");
