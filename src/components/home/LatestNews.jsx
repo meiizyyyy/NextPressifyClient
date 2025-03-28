@@ -2,6 +2,8 @@
 
 import { fetchNewsBlogs } from "@/services/api.services";
 import ArticleCard from "@/components/ui/ArticleCard";
+import Link from "next/link";
+import { Button } from "@heroui/react";
 
 function LatestNews() {
 	const { data, error, isLoading } = fetchNewsBlogs();
@@ -30,9 +32,9 @@ function LatestNews() {
 		<div className="flex flex-col gap-5">
 			<div className="flex justify-between items-center">
 				<h2 className="text-2xl font-bold">Tin tức mới nhất</h2>
-				<a href="/blogs/news" className="text-primary hover:underline">
+				<Button as={Link} href="/blogs/news" variant="light" className="">
 					Xem tất cả
-				</a>
+				</Button>
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 				{newsList.map((article) => (

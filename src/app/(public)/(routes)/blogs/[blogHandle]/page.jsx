@@ -57,9 +57,7 @@ const BlogDetailPage = () => {
 			</header>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
 				{blog.articles?.map((article) => (
-					<Link href={`/blogs/${blogHandle}/${article.handle}`} key={article.id}>
-						<ArticleCard article={article} />
-					</Link>
+					<ArticleCard article={article} key={article.id} />
 				))}
 			</div>
 		</div>

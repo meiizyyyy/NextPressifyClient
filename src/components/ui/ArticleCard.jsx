@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Card, CardBody, CardFooter, Image } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Image } from "@heroui/react";
+import Link from "next/link";
 
 const ArticleCard = ({ article }) => {
 	const { title, handle, image, publishedAt, author } = article;
@@ -29,7 +30,9 @@ const ArticleCard = ({ article }) => {
 				</div>
 			</CardBody>
 			<CardFooter className="px-4 pb-4">
-				<button className="text-primary hover:text-primary-dark font-medium">Đọc thêm →</button>
+				<Button as={Link} href={`/blogs/article/${handle}`} variant="light" className="">
+					Đọc thêm →
+				</Button>
 			</CardFooter>
 		</Card>
 	);
