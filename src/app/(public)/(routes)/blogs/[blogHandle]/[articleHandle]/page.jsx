@@ -50,12 +50,14 @@ const ArticleDetailPage = () => {
 					<Link href="/blogs/news">News Feed</Link>
 				</BreadcrumbItem>
 				<BreadcrumbItem>
-					<Link href={`/blogs/${articleHandle}`}>{article.title}</Link>
+					<Link href={`/blogs/${article.blog.handle}/${articleHandle}`} className="">
+						{article.title}
+					</Link>
 				</BreadcrumbItem>
 			</Breadcrumbs>
 
 			<article className=" mx-auto">
-				<div className="relative w-full h-[400px] mb-8">
+				<div className="relative min-w-full h-auto mb-8">
 					<Image
 						src={article.image?.url || "/placeholder.jpg"}
 						alt={article.title}
