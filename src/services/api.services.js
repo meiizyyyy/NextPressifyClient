@@ -211,7 +211,7 @@ export const customerCartIdUpdate = async (cartId, customerId) => {
 
 export const getCart = (cartId) => {
 	if (!cartId) {
-		return;
+		return { data: null, error: null, isLoading: false };
 	}
 
 	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/get-cart?cartId=${cartId}`;

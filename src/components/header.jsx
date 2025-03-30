@@ -193,8 +193,12 @@ const Header = () => {
 									<p className="font-semibold">Đăng nhập với</p>
 									<p className="font-semibold">{user.email}</p>
 								</DropdownItem>
-								<DropdownItem key="cart">Giỏ hàng của tôi</DropdownItem>
-								<DropdownItem key="settings">Cài đặt tài khoản</DropdownItem>
+								<DropdownItem key="cart" as={Link} href="/cart">
+									Giỏ hàng của tôi
+								</DropdownItem>
+								<DropdownItem key="settings" as={Link} href="/account">
+									Cài đặt tài khoản
+								</DropdownItem>
 								<DropdownItem key="orders">Đơn hàng của tôi</DropdownItem>
 								<DropdownItem key="logout" color="danger" onPress={handleLogout}>
 									Đăng xuất

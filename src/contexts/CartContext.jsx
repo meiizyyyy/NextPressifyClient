@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (data) {
-			setCart(data.data);
+			setCart(data?.data);
 		}
 	}, [data]);
 
