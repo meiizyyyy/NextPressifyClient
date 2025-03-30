@@ -126,7 +126,7 @@ const SignInPage = (props) => {
 							Đăng nhập
 						</Button>
 					</Form>
-					<div className="flex items-center gap-4 py-2">
+					{/* <div className="flex items-center gap-4 py-2">
 						<Divider className="flex-1" />
 						<p className="shrink-0 text-tiny text-default-500">HOẶC</p>
 						<Divider className="flex-1" />
@@ -140,7 +140,7 @@ const SignInPage = (props) => {
 							variant="bordered">
 							Tiếp tục với Github
 						</Button>
-					</div>
+					</div> */}
 					<p className="text-center text-small">
 						Chưa có tài khoản?&nbsp;
 						<Link href="/sign-up" size="sm">

@@ -23,7 +23,7 @@ import {
 import React, { useEffect, useState } from "react";
 import CartIcon from "@components/cart/cart_icon";
 import ButtonComponent from "@/components/ui/Button";
-import { fetchBottomHeaderMenu, fetchHeaderCollection, fetchHeaderMainMenu } from "@/services/api.services";
+import { fetchHeaderCollection, fetchHeaderMainMenu } from "@/services/api.services";
 import Link from "next/link";
 import LinkComponent from "./ui/Link";
 import InfomationBar from "./InfomationBar";
@@ -99,6 +99,7 @@ const Header = () => {
 					src="/images/thang_02_pc_gvn_banner_191b3b.webp"
 					width={1200}
 					height={10}
+					priority
 					alt="thang_02_pc_gvn_banner_191b3b"></Image>
 			</Navbar>
 			<Navbar

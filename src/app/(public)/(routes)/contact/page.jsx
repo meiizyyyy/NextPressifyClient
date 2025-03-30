@@ -10,7 +10,7 @@ const ContactPage = () => {
 				<CardBody className="text-2xl font-bold text-center">Kết nối với chúng tôi </CardBody>
 			</Card>
 
-			<div className="flex mt-20 gap-4">
+			<div className="flex flex-col md:flex-row mt-20 gap-4">
 				<Card className="max-w-[400px] hover:scale-105">
 					<CardHeader className="flex gap-3">
 						<Image

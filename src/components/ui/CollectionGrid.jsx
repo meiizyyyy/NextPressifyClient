@@ -12,7 +12,7 @@ const CollectionGrid = ({ heading, fetchData }) => {
 			<div className="container mx-auto px-4 py-8 w-full">
 				<Skeleton className="h-8 w-64 mb-6 rounded-lg" />
 				<div className="grid grid-cols-4 sm:grid-cols-6 gap-8">
-					{[...Array(8)].map((_, index) => (
+					{[...Array(12)].map((_, index) => (
 						<div key={index} className="flex flex-col items-center gap-4">
 							<Skeleton className="h-48 w-full rounded-lg" />
 							<Skeleton className="h-6 w-32" />

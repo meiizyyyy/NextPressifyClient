@@ -19,6 +19,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CollectionSlider from "@/components/home/CollectionSlider";
 import { useAuth } from "@/contexts/AuthContext";
+import LatestNews from "@/components/home/LatestNews";
 
 const ProductDetailPage = () => {
 	const { handle } = useParams();
@@ -183,7 +184,7 @@ const ProductDetailPage = () => {
 						<Link href="/">Trang chủ</Link>
 					</BreadcrumbItem>
 					<BreadcrumbItem>
-						<Link href="/search">Sản Phẩm</Link>
+						<Link href="/collections/all">Sản Phẩm</Link>
 					</BreadcrumbItem>
 					<BreadcrumbItem>
 						<Link href={`/products/${product.handle}`}>{product.title}</Link>
@@ -402,6 +403,7 @@ const ProductDetailPage = () => {
 			</div>
 
 			<CollectionSlider handle={product.vendor} limit={10} additionalText={`Sản phẩm cùng thương hiệu`} />
+			<LatestNews />
 		</div>
 	);
 };

@@ -11,11 +11,7 @@ export const fetchAllProducts = (cursor = null, sortKey = "CREATED_AT", reverse 
 		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
 		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?sortKey=${sortKey}&reverse=${reverse}`;
 
-	return useSWR(url, fetcher);
-};
-
-export const fetchBottomHeaderMenu = () => {
-	return useSWR(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/bottomHeaderMenu`, fetcher);
+	return useSWR(url, fetcher, { revalidateOnFocus: false });
 };
 
 export const fetchHeaderMainMenu = () => {
@@ -23,7 +19,8 @@ export const fetchHeaderMainMenu = () => {
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/menus/header-main-menu`,
 		fetcher,
 		{
-			fallbackData: { data: { menu: [] } },
+			// fallbackData: { data: { menu: [] } },
+			revalidateOnFocus: false,
 		},
 	);
 };
@@ -32,7 +29,8 @@ export const fetchHeaderCollection = () => {
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/menus/header-collection`,
 		fetcher,
 		{
-			fallbackData: { data: { menu: [] } },
+			// fallbackData: { data: { menu: [] } },
+			revalidateOnFocus: false,
 		},
 	);
 };
@@ -42,7 +40,8 @@ export const fetchHomePageMarketing = () => {
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/home-page-marketing`,
 		fetcher,
 		{
-			fallbackData: { data: [] },
+			// fallbackData: { data: [] },
+			revalidateOnFocus: false,
 		},
 	);
 };
@@ -52,14 +51,17 @@ export const fetchHomePageBanner = () => {
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/home-page-banner`,
 		fetcher,
 		{
-			fallbackData: { data: [] },
+			// fallbackData: { data: [] },
+			revalidateOnFocus: false,
+			revalidateIfStale: false,
 		},
 	);
 };
 
 export const fetchAllCollection = () => {
 	return useSWR(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections`, fetcher, {
-		fallbackData: { data: { collections: [] } },
+		// fallbackData: { data: { collections: [] } },
+		revalidateOnFocus: false,
 	});
 };
 
@@ -68,7 +70,9 @@ export const fetchBrandCategoriesCollection = () => {
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/brand-categories`,
 		fetcher,
 		{
-			fallbackData: { data: { collections: [] } },
+			// fallbackData: { data: { collections: [] } },
+			revalidateOnFocus: false,
+			revalidateIfStale: false,
 		},
 	);
 };
@@ -78,7 +82,9 @@ export const fetchProductCategoriesCollection = () => {
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/product-categories`,
 		fetcher,
 		{
-			fallbackData: { data: { collections: [] } },
+			// fallbackData: { data: { collections: [] } },
+			revalidateOnFocus: false,
+			revalidateIfStale: false,
 		},
 	);
 };
@@ -89,6 +95,7 @@ export const fetchHomeSliderCollections = () => {
 		fetcher,
 		{
 			fallbackData: { data: { collections: [] } },
+			revalidateOnFocus: false,
 		},
 	);
 };
@@ -100,6 +107,7 @@ export const fetchCollectionByHandle = (handle, cursor = null, sortKey = "CREATE
 
 	return useSWR(url, fetcher, {
 		fallbackData: { data: { products: [] } },
+		revalidateOnFocus: false,
 	});
 };
 
@@ -115,14 +123,18 @@ export const searchProducts = (keyword, cursor = null, sortKey = "RELEVANCE", re
 		process.env.NEXT_PUBLIC_API_VER
 	}/products/search?${params.toString()}`;
 
-	return useSWR(url, fetcher);
+	return useSWR(url, fetcher, {
+		revalidateOnFocus: false,
+	});
 };
 
 export const fetchProductByHandle = (handle) => {
 	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/${handle}`;
 
 	return useSWR(url, fetcher, {
-		fallbackData: { data: { product: null } },
+		// fallbackData: { data: { product: null } },
+		revalidateOnFocus: false,
+		revalidateIfStale: false,
 	});
 };
 
@@ -133,6 +145,7 @@ export const fetchNewsBlogs = (cursor = null, sortKey = "CREATED_AT", reverse = 
 
 	return useSWR(url, fetcher, {
 		fallbackData: { data: { articles: [], pageInfo: { hasNextPage: false, endCursor: null } } },
+		revalidateOnFocus: false,
 	});
 };
 
@@ -196,7 +209,11 @@ export const customerCartIdUpdate = async (cartId, customerId) => {
 	}
 };
 
-export const getCart = async (cartId) => {
+export const getCart = (cartId) => {
+	if (!cartId) {
+		return;
+	}
+
 	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/get-cart?cartId=${cartId}`;
 
 	return useSWR(url, fetcher, {
