@@ -217,7 +217,8 @@ export const getCart = (cartId) => {
 	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/get-cart?cartId=${cartId}`;
 
 	return useSWR(url, fetcher, {
-		fallbackData: {},
+		revalidateOnFocus: true,
+		// fallbackData: {},
 	});
 };
 

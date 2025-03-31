@@ -10,6 +10,8 @@ import React from "react";
 const CartPage = () => {
 	const { cart } = useCart();
 
+	console.log("Check cart", cart);
+
 	return (
 		<div className="flex flex-col gap-10 w-full ">
 			<div className="container mx-auto px-4 py-10">
@@ -21,10 +23,20 @@ const CartPage = () => {
 						<Link href={`/cart`}>Giỏ hàng</Link>
 					</BreadcrumbItem>
 				</Breadcrumbs>
-				<h1 className="text-2xl font-bold mb-12">Giỏ hàng</h1>
+				<h1 className="text-3xl font-bold mb-12">Giỏ hàng</h1>
 				<div className="flex flex-col lg:flex-row gap-6 mb-36 lg:mb-20">
-					{cart?.lines?.lenght < 0 ? (
-						<h4>Hiện không có sản phẩm nào trong giỏ hàng</h4>
+					{ !cart || cart.length === 0 ? (
+						<div className="flex flex-col gap-6 lg:w-4/6">
+							<h4>Hiện không có sản phẩm nào trong giỏ hàng</h4>
+							<Button
+								className="w-full mt-4"
+								color="primary"
+								variant="flat"
+								as={Link}
+								href="/collections/all">
+								Đi đến trang sản phẩm
+							</Button>
+						</div>
 					) : (
 						<div className="flex flex-col gap-6 lg:w-4/6">
 							{cart?.lines?.map((line) => (
@@ -53,12 +65,18 @@ const CartPage = () => {
 							<div className="flex justify-between"></div>
 							<div className="flex justify-between">
 								<span className="font-bold">Tổng cộng</span>
-								<span>
+								<span className="text-2xl font-bold text-danger-500">
 									{new Intl.NumberFormat("vi-VN").format(cart?.cost?.totalAmount?.amount)}{" "}
 									{cart?.cost?.totalAmount?.currencyCode}
 								</span>
 							</div>
-							<Button className="w-full mt-4" color="primary" variant="flat">
+							<Button
+								className="w-full mt-4"
+								isDisabled={cart.length === 0}
+								color="primary"
+								variant="flat"
+								as={Link}
+								href="/checkout">
 								Đặt hàng
 							</Button>
 						</div>
