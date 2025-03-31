@@ -55,7 +55,7 @@ const AccountPage = () => {
 									<label className="block text-sm font-medium mb-2">Số điện thoại</label>
 									<Input type="tel" defaultValue={user.phone} className="w-full" />
 								</div>
-								<div>
+								<div className="flex items-center gap-2">
 									<Switch isSelected={true} />
 									<label className="block text-sm font-medium mb-2">
 										Đồng ý nhận thông tin mới nhất
