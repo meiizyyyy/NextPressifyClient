@@ -247,6 +247,7 @@ const ProductDetailPage = () => {
 
 						<div className="mb-6">
 							<h3 className="text-lg font-semibold mb-2">Số lượng</h3>
+							<h3> {product.variants.edges[0].node.id}</h3>
 							<div className="flex items-center">
 								<Button
 									size="sm"

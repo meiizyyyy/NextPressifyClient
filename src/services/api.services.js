@@ -6,17 +6,19 @@ import dotenv from "dotenv";
 dotenv.config();
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
+const globalUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}`;
+
 export const fetchAllProducts = (cursor = null, sortKey = "CREATED_AT", reverse = true) => {
 	const url = cursor
-		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
-		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/get-all-products-with-paginate?sortKey=${sortKey}&reverse=${reverse}`;
+		? `${globalUrl}/products/get-all-products-with-paginate?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
+		: `${globalUrl}/products/get-all-products-with-paginate?sortKey=${sortKey}&reverse=${reverse}`;
 
 	return useSWR(url, fetcher, { revalidateOnFocus: false });
 };
 
 export const fetchHeaderMainMenu = () => {
 	return useSWR(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/menus/header-main-menu`,
+		`${globalUrl}/menus/header-main-menu`,
 		fetcher,
 		{
 			// fallbackData: { data: { menu: [] } },
@@ -26,7 +28,7 @@ export const fetchHeaderMainMenu = () => {
 };
 export const fetchHeaderCollection = () => {
 	return useSWR(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/menus/header-collection`,
+		`${globalUrl}/menus/header-collection`,
 		fetcher,
 		{
 			// fallbackData: { data: { menu: [] } },
@@ -37,7 +39,7 @@ export const fetchHeaderCollection = () => {
 
 export const fetchHomePageMarketing = () => {
 	return useSWR(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/home-page-marketing`,
+		`${globalUrl}/blogs/home-page-marketing`,
 		fetcher,
 		{
 			// fallbackData: { data: [] },
@@ -48,7 +50,7 @@ export const fetchHomePageMarketing = () => {
 
 export const fetchHomePageBanner = () => {
 	return useSWR(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/home-page-banner`,
+		`${globalUrl}/blogs/home-page-banner`,
 		fetcher,
 		{
 			// fallbackData: { data: [] },
@@ -59,7 +61,7 @@ export const fetchHomePageBanner = () => {
 };
 
 export const fetchAllCollection = () => {
-	return useSWR(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections`, fetcher, {
+	return useSWR(`${globalUrl}/collections`, fetcher, {
 		// fallbackData: { data: { collections: [] } },
 		revalidateOnFocus: false,
 	});
@@ -67,7 +69,7 @@ export const fetchAllCollection = () => {
 
 export const fetchBrandCategoriesCollection = () => {
 	return useSWR(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/brand-categories`,
+		`${globalUrl}/collections/brand-categories`,
 		fetcher,
 		{
 			// fallbackData: { data: { collections: [] } },
@@ -79,7 +81,7 @@ export const fetchBrandCategoriesCollection = () => {
 
 export const fetchProductCategoriesCollection = () => {
 	return useSWR(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/product-categories`,
+		`${globalUrl}/collections/product-categories`,
 		fetcher,
 		{
 			// fallbackData: { data: { collections: [] } },
@@ -91,7 +93,7 @@ export const fetchProductCategoriesCollection = () => {
 
 export const fetchHomeSliderCollections = () => {
 	return useSWR(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/home-slider-collections`,
+		`${globalUrl}/collections/home-slider-collections`,
 		fetcher,
 		{
 			fallbackData: { data: { collections: [] } },
@@ -102,8 +104,8 @@ export const fetchHomeSliderCollections = () => {
 
 export const fetchCollectionByHandle = (handle, cursor = null, sortKey = "CREATED_AT", reverse = true) => {
 	const url = cursor
-		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
-		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/collections/${handle}?sortKey=${sortKey}&reverse=${reverse}`;
+		? `${globalUrl}/collections/${handle}?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
+		: `${globalUrl}/collections/${handle}?sortKey=${sortKey}&reverse=${reverse}`;
 
 	return useSWR(url, fetcher, {
 		fallbackData: { data: { products: [] } },
@@ -119,9 +121,7 @@ export const searchProducts = (keyword, cursor = null, sortKey = "RELEVANCE", re
 		reverse,
 	});
 
-	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${
-		process.env.NEXT_PUBLIC_API_VER
-	}/products/search?${params.toString()}`;
+	const url = `${globalUrl}/products/search?${params.toString()}`;
 
 	return useSWR(url, fetcher, {
 		revalidateOnFocus: false,
@@ -129,7 +129,7 @@ export const searchProducts = (keyword, cursor = null, sortKey = "RELEVANCE", re
 };
 
 export const fetchProductByHandle = (handle) => {
-	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/products/${handle}`;
+	const url = `${globalUrl}/products/${handle}`;
 
 	return useSWR(url, fetcher, {
 		// fallbackData: { data: { product: null } },
@@ -140,8 +140,8 @@ export const fetchProductByHandle = (handle) => {
 
 export const fetchNewsBlogs = (cursor = null, sortKey = "CREATED_AT", reverse = true) => {
 	const url = cursor
-		? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/news-blog?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
-		: `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/blogs/news-blog?sortKey=${sortKey}&reverse=${reverse}`;
+		? `${globalUrl}/blogs/news-blog?cursor=${cursor}&sortKey=${sortKey}&reverse=${reverse}`
+		: `${globalUrl}/blogs/news-blog?sortKey=${sortKey}&reverse=${reverse}`;
 
 	return useSWR(url, fetcher, {
 		fallbackData: { data: { articles: [], pageInfo: { hasNextPage: false, endCursor: null } } },
@@ -151,10 +151,7 @@ export const fetchNewsBlogs = (cursor = null, sortKey = "CREATED_AT", reverse = 
 
 export const signUp = async (data) => {
 	try {
-		const res = await axios.post(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/customers/register`,
-			data,
-		);
+		const res = await axios.post(`${globalUrl}/customers/register`, data);
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error.message;
@@ -164,10 +161,7 @@ export const signUp = async (data) => {
 export const login = async (data) => {
 	delete data.remember;
 	try {
-		const res = await axios.post(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/customers/login`,
-			data,
-		);
+		const res = await axios.post(`${globalUrl}/customers/login`, data);
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error;
@@ -176,10 +170,7 @@ export const login = async (data) => {
 
 export const getCustomerDetails = async (accessToken) => {
 	try {
-		const res = await axios.post(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/customers/get-customer-details`,
-			{ accessToken },
-		);
+		const res = await axios.post(`${globalUrl}/customers/get-customer-details`, { accessToken });
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error;
@@ -188,9 +179,7 @@ export const getCustomerDetails = async (accessToken) => {
 
 export const createCart = async () => {
 	try {
-		const res = await axios.post(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/create`,
-		);
+		const res = await axios.post(`${globalUrl}/cart/create`);
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error;
@@ -199,10 +188,7 @@ export const createCart = async () => {
 
 export const customerCartIdUpdate = async (cartId, customerId) => {
 	try {
-		const res = await axios.post(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/customer-cart-id-update`,
-			{ cartId, customerId },
-		);
+		const res = await axios.post(`${globalUrl}/cart/customer-cart-id-update`, { cartId, customerId });
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error;
@@ -214,7 +200,7 @@ export const getCart = (cartId) => {
 		return { data: null, error: null, isLoading: false };
 	}
 
-	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/get-cart?cartId=${cartId}`;
+	const url = `${globalUrl}/cart/get-cart?cartId=${cartId}`;
 
 	return useSWR(url, fetcher, {
 		revalidateOnFocus: true,
@@ -224,10 +210,25 @@ export const getCart = (cartId) => {
 
 export const addToCart = async (data) => {
 	try {
-		const res = await axios.post(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_VER}/cart/add-to-cart`,
-			data,
-		);
+		const res = await axios.post(`${globalUrl}/cart/add-to-cart`, data);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
+
+export const updateCartLine = async (data) => {
+	try {
+		const res = await axios.post(`${globalUrl}/cart/cart-line-update`, data);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
+
+export const removeFromCart = async (data) => {
+	try {
+		const res = await axios.post(`${globalUrl}/cart/remove-from-cart`, data);
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error;

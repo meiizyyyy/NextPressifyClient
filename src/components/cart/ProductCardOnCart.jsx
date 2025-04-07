@@ -1,127 +1,158 @@
-import { Button, Card, CardBody, Divider, Image, Input } from "@heroui/react";
+import { Button, Card, CardBody, Divider, Image, Input, Link, Skeleton } from "@heroui/react";
 import { useCart } from "@/contexts/CartContext";
-import { addToCart, createCart } from "@/services/api.services";
+import { addToCart, createCart, updateCartLine } from "@/services/api.services";
 import { addToast } from "@heroui/react";
 import { useState } from "react";
 
 const ProductCardOnCart = ({ item }) => {
-	const { cart, setCart } = useCart();
+	const { cart, setCart, refreshCart } = useCart();
 	const merchandise = item.merchandise;
 	const product = merchandise.product;
+	const [quantity, setQuantity] = useState(item.quantity);
+	const [isLoading, setIsLoading] = useState(false);
 
-	// const [quantity, setQuantity] = useState(item.quantity);
+	const handleQuantityChange = async (change) => {
+		setIsLoading(true);
+		try {
+			const cartId = localStorage.getItem("cartId");
+			if (!cartId) {
+				addToast({
+					title: "Lỗi",
+					description: "Không tìm thấy giỏ hàng",
+					color: "danger",
+				});
+				return;
+			}
 
-	// const handleQuantityChange = async (newQuantity) => {
-	// 	try {
-	// 		const cartId = localStorage.getItem("cartId");
-	// 		if (!cartId) {
-	// 			const res = await createCart();
-	// 			localStorage.setItem("cartId", res.cart.id);
-	// 		}
+			const newQuantity = Math.max(1, quantity + change);
+			const res = await updateCartLine({
+				cartId,
+				linesId: item.id,
+				quantity: newQuantity,
+			});
 
-	// 		const res = await addToCart({
-	// 			cartId: localStorage.getItem("cartId"),
-	// 			variantId: item.merchandise.id,
-	// 			quantity: newQuantity,
-	// 		});
+			if (res.data.success) {
+				if (res?.data?.data?.warning) {
+					addToast({
+						title: "Cập nhật giỏ hàng",
+						description: res.data.data.warning.message,
+						color: "warning",
+					});
+					// Cập nhật lại số lượng thực tế từ server
+					setQuantity(res.data.data.cart.lines.find((line) => line.id === item.id).quantity);
+				} else {
+					setQuantity(newQuantity);
+					addToast({
+						title: "Cập nhật giỏ hàng",
+						description: "Số lượng sản phẩm đã được cập nhật",
+						color: "success",
+					});
+				}
+				// Refresh giỏ hàng
+				refreshCart();
+				setIsLoading(false);
+			}
+		} catch (error) {
+			addToast({
+				title: "Lỗi",
+				description: error.message || "Có lỗi xảy ra khi cập nhật giỏ hàng",
+				color: "danger",
+			});
+			setIsLoading(false);
+		}
+	};
 
-	// 		if (res.data.success) {
-	// 			setQuantity(newQuantity);
-	// 			addToast({
-	// 				title: "Cập nhật giỏ hàng",
-	// 				description: "Số lượng sản phẩm đã được cập nhật",
-	// 				color: "success",
-	// 			});
-	// 		} else {
-	// 			addToast({
-	// 				title: "Lỗi",
-	// 				description: "Không thể cập nhật số lượng sản phẩm",
-	// 				color: "danger",
-	// 			});
-	// 		}
-	// 	} catch (error) {
-	// 		addToast({
-	// 			title: "Lỗi",
-	// 			description: "Có lỗi xảy ra khi cập nhật giỏ hàng",
-	// 			color: "danger",
-	// 		});
-	// 	}
-	// };
+	const handleRemove = async () => {
+		try {
+			const cartId = localStorage.getItem("cartId");
+			if (!cartId) {
+				addToast({
+					title: "Lỗi",
+					description: "Không tìm thấy giỏ hàng",
+					color: "danger",
+				});
+				return;
+			}
 
-	// const handleRemove = () => {
-	// 	const newCart = cart.filter((cartItem) => cartItem.node.id !== item.node.id);
-	// 	setCart(newCart);
-	// 	addToast({
-	// 		title: "Xóa sản phẩm",
-	// 		description: "Sản phẩm đã được xóa khỏi giỏ hàng",
-	// 		color: "success",
-	// 	});
-	// };
+			const res = await removeFromCart({
+				cartId,
+				lineIds: [item.id],
+			});
+
+			if (res.data.success) {
+				addToast({
+					title: "Xóa sản phẩm",
+					description: "Sản phẩm đã được xóa khỏi giỏ hàng",
+					color: "success",
+				});
+				refreshCart();
+			}
+		} catch (error) {
+			addToast({
+				title: "Lỗi",
+				description: error.message || "Có lỗi xảy ra khi xóa sản phẩm",
+				color: "danger",
+			});
+		}
+	};
+
+	if (isLoading) {
+		return (
+			<Card radius="sm" shadow="none" className="w-full min-h-fit flex flex-row gap-4">
+				<div className="w-full max-w-32 max-h-32">
+					<Image
+						alt={product.handle}
+						className="object-cover max-w-32 min-h-32 max-h-32 "
+						src={product.featuredImage.url}
+					/>
+				</div>
+
+				<CardBody>
+					<Link href={`/products/${product.handle}`} className="text-md font-semibold mb-2  text-black">
+						{product.title}
+					</Link>
+
+					<div className="flex items-center justify-between gap-2 mb-4">
+						<div className="flex items-center gap-2">
+							<Skeleton>
+								<p className="text-lg font-bold text-black-500">{quantity}</p>
+							</Skeleton>{" "}
+							x
+							<span className="text-lg font-bold text-red-500">
+								{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
+								{merchandise.price.currencyCode}
+							</span>
+							{item.cost.compareAtAmountPerQuantity && (
+								<span className="text-sm text-gray-500 line-through">
+									{new Intl.NumberFormat("vi-VN").format(
+										parseInt(item.cost.compareAtAmountPerQuantity.amount),
+									)}{" "}
+									VND
+								</span>
+							)}
+						</div>
+						<div className="flex items-center gap-2">
+							<Button
+								size="sm"
+								variant="flat"
+								onPress={() => handleQuantityChange(-1)}
+								isDisabled={quantity <= 1}>
+								-
+							</Button>
+							<Button size="sm" variant="flat" onPress={() => handleQuantityChange(1)}>
+								+
+							</Button>
+							<Button color="danger" variant="flat" onPress={handleRemove} className="ml-auto">
+								Xóa
+							</Button>
+						</div>
+					</div>
+				</CardBody>
+			</Card>
+		);
+	}
 
 	return (
-		// <Card className="w-full mb-4 ">
-		// 	<CardBody className="flex flex-row gap-4 h-fit">
-		// 		<div className="w-full md:w-1/4 scale-75">
-		// 			<Image
-		// 				alt={product.handle}
-		// 				className="object-cover w-full h-32 md:h-40 rounded-lg"
-		// 				src={product.featuredImage.url}
-		// 			/>
-		// 		</div>
-		// 		<div className="flex-1">
-		// 			<h3 className="text-md font-semibold mb-2">{product.title}</h3>
-		// 			{/* <p className="text-gray-600 mb-2">{item.merchandise.title}</p> */}
-		// 			<div className="flex items-center gap-2 mb-4">
-		// 				<span className="text-lg font-bold text-red-500">
-		// 					{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
-		// 					{merchandise.price.currencyCode}
-		// 				</span>
-		// 				{/* {item.cost.compareAtAmountPerQuantity && (
-		// 					<span className="text-sm text-gray-500 line-through">
-		// 						{new Intl.NumberFormat("vi-VN").format(
-		// 							parseInt(item.cost.compareAtAmountPerQuantity.amount),
-		// 						)}{" "}
-		// 						VND
-		// 					</span>
-		// 				)} */}
-		// 			</div>
-		// 			<div className="flex items-center gap-4">
-		// 				<div className="flex items-center gap-2">
-		// 					<Button
-		// 						size="sm"
-		// 						variant="flat"
-		// 						// onPress={() => handleQuantityChange(Math.max(1, quantity - 1))}
-		// 						// isDisabled={quantity <= 1}
-		// 					>
-		// 						-
-		// 					</Button>
-		// 					<Input
-		// 						type="number"
-		// 						min="1"
-		// 						value={item.quantity}
-		// 						// onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
-		// 						className="w-16 text-center"
-		// 					/>
-		// 					<Button
-		// 						size="sm"
-		// 						variant="flat"
-		// 						// onPress={() => handleQuantityChange(quantity + 1)}
-		// 						// isDisabled={quantity >= item.merchandise.availableForSale}
-		// 					>
-		// 						+
-		// 					</Button>
-		// 				</div>
-		// 				<Button
-		// 					color="danger"
-		// 					variant="flat"
-		// 					// onPress={handleRemove}
-		// 					className="ml-auto">
-		// 					Xóa
-		// 				</Button>
-		// 			</div>
-		// 		</div>
-		// 	</CardBody>
-		// </Card>
 		<Card radius="sm" shadow="none" className="w-full min-h-fit flex flex-row gap-4">
 			<div className="w-full max-w-32 max-h-32">
 				<Image
@@ -132,10 +163,12 @@ const ProductCardOnCart = ({ item }) => {
 			</div>
 
 			<CardBody>
-				<h3 className="text-md font-semibold mb-2">{product.title}</h3>
+				<Link href={`/products/${product.handle}`} className="text-md font-semibold mb-2  text-black">
+					{product.title}
+				</Link>
 				<div className="flex items-center justify-between gap-2 mb-4">
 					<div className="flex items-center gap-2">
-						<p className="text-lg font-bold text-black-500">{item.quantity}</p> x
+						<p className="text-lg font-bold text-black-500">{quantity}</p> x
 						<span className="text-lg font-bold text-red-500">
 							{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
 							{merchandise.price.currencyCode}
@@ -153,37 +186,16 @@ const ProductCardOnCart = ({ item }) => {
 						<Button
 							size="sm"
 							variant="flat"
-							// onPress={() => handleQuantityChange(Math.max(1, quantity - 1))}
-							// isDisabled={quantity <= 1}
-						>
+							onPress={() => handleQuantityChange(-1)}
+							isDisabled={quantity <= 1}>
 							-
 						</Button>
-						<Button
-							size="sm"
-							variant="flat"
-							// onPress={() => handleQuantityChange(quantity + 1)}
-							// isDisabled={quantity >= item.merchandise.availableForSale}
-						>
+						<Button size="sm" variant="flat" onPress={() => handleQuantityChange(1)}>
 							+
 						</Button>
-						<Button
-							color="danger"
-							variant="flat"
-							// onPress={handleRemove}
-							className="ml-auto">
+						<Button color="danger" variant="flat" onPress={handleRemove} className="ml-auto">
 							Xóa
 						</Button>
-					</div>
-				</div>
-				<div className="flex items-center gap-4">
-					<div className="flex items-center gap-2">
-						{/* <Input
-							type="number"
-							min="1"
-							value={item.quantity}
-							// onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
-							className="w-16 text-center"
-						/> */}
 					</div>
 				</div>
 			</CardBody>
