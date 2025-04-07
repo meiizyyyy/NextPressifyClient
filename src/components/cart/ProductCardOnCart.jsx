@@ -1,6 +1,6 @@
 import { Button, Card, CardBody, Divider, Image, Input, Link, Skeleton } from "@heroui/react";
 import { useCart } from "@/contexts/CartContext";
-import { addToCart, createCart, updateCartLine } from "@/services/api.services";
+import { addToCart, createCart, removeFromCart, updateCartLine } from "@/services/api.services";
 import { addToast } from "@heroui/react";
 import { useState } from "react";
 
@@ -96,62 +96,6 @@ const ProductCardOnCart = ({ item }) => {
 		}
 	};
 
-	if (isLoading) {
-		return (
-			<Card radius="sm" shadow="none" className="w-full min-h-fit flex flex-row gap-4">
-				<div className="w-full max-w-32 max-h-32">
-					<Image
-						alt={product.handle}
-						className="object-cover max-w-32 min-h-32 max-h-32 "
-						src={product.featuredImage.url}
-					/>
-				</div>
-
-				<CardBody>
-					<Link href={`/products/${product.handle}`} className="text-md font-semibold mb-2  text-black">
-						{product.title}
-					</Link>
-
-					<div className="flex items-center justify-between gap-2 mb-4">
-						<div className="flex items-center gap-2">
-							<Skeleton>
-								<p className="text-lg font-bold text-black-500">{quantity}</p>
-							</Skeleton>{" "}
-							x
-							<span className="text-lg font-bold text-red-500">
-								{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
-								{merchandise.price.currencyCode}
-							</span>
-							{item.cost.compareAtAmountPerQuantity && (
-								<span className="text-sm text-gray-500 line-through">
-									{new Intl.NumberFormat("vi-VN").format(
-										parseInt(item.cost.compareAtAmountPerQuantity.amount),
-									)}{" "}
-									VND
-								</span>
-							)}
-						</div>
-						<div className="flex items-center gap-2">
-							<Button
-								size="sm"
-								variant="flat"
-								onPress={() => handleQuantityChange(-1)}
-								isDisabled={quantity <= 1}>
-								-
-							</Button>
-							<Button size="sm" variant="flat" onPress={() => handleQuantityChange(1)}>
-								+
-							</Button>
-							<Button color="danger" variant="flat" onPress={handleRemove} className="ml-auto">
-								Xóa
-							</Button>
-						</div>
-					</div>
-				</CardBody>
-			</Card>
-		);
-	}
-
 	return (
 		<Card radius="sm" shadow="none" className="w-full min-h-fit flex flex-row gap-4">
 			<div className="w-full max-w-32 max-h-32">
@@ -166,9 +110,17 @@ const ProductCardOnCart = ({ item }) => {
 				<Link href={`/products/${product.handle}`} className="text-md font-semibold mb-2  text-black">
 					{product.title}
 				</Link>
-				<div className="flex items-center justify-between gap-2 mb-4">
+				<div className="flex flex-col items-start justify-between gap-2 mb-4">
 					<div className="flex items-center gap-2">
-						<p className="text-lg font-bold text-black-500">{quantity}</p> x
+						{isLoading ? (
+							<Skeleton className="w-8 h-4">
+								<p className="text-lg font-bold text-black-500">{quantity}</p> x
+							</Skeleton>
+						) : (
+							<>
+								<p className="text-lg font-bold text-black-500">{quantity}</p> x
+							</>
+						)}
 						<span className="text-lg font-bold text-red-500">
 							{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
 							{merchandise.price.currencyCode}
@@ -182,7 +134,7 @@ const ProductCardOnCart = ({ item }) => {
 							</span>
 						)}
 					</div>
-					<div className="flex items-center gap-2">
+					<div className="flex items-center justify-between gap-2 w-full">
 						<Button
 							size="sm"
 							variant="flat"
