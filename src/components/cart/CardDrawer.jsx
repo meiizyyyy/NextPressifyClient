@@ -27,6 +27,11 @@ const CardDrawer = () => {
 		router.push("/cart");
 	};
 
+	const handleCheckout = () => {
+		setIsOpen(false);
+		router.push("/checkout");
+	};
+
 	return (
 		<div>
 			<Button isIconOnly variant="light" onPress={() => setIsOpen(true)} className="w-fit " size="sm">
@@ -50,11 +55,13 @@ const CardDrawer = () => {
 							{new Intl.NumberFormat("vi-VN").format(parseInt(cart?.cost?.totalAmount?.amount))}
 							{cart?.cost?.totalAmount.currencyCode}
 						</h2>
-						<div>
+						<div className="flex flex-row gap-2">
 							<Button color="primary" variant="light" onPress={handleViewCart}>
 								Xem chi tiết
 							</Button>
-							<Button color="primary">Đặt hàng</Button>
+							<Button color="primary" onPress={handleCheckout}>
+								Đặt hàng
+							</Button>
 						</div>
 					</DrawerFooter>
 				</DrawerContent>

@@ -1,4 +1,19 @@
-import { Button, Card, CardBody, Divider, Image, Input, Link, Skeleton } from "@heroui/react";
+import {
+	Button,
+	Card,
+	CardBody,
+	Divider,
+	Image,
+	Input,
+	Link,
+	Skeleton,
+	useDisclosure,
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+} from "@heroui/react";
 import { useCart } from "@/contexts/CartContext";
 import { addToCart, createCart, removeFromCart, updateCartLine } from "@/services/api.services";
 import { addToast } from "@heroui/react";
@@ -10,11 +25,11 @@ const ProductCardOnCart = ({ item }) => {
 	const product = merchandise.product;
 	const [quantity, setQuantity] = useState(item.quantity);
 	const [isLoading, setIsLoading] = useState(false);
-
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const handleQuantityChange = async (change) => {
 		setIsLoading(true);
 		try {
-			const cartId = localStorage.getItem("cartId");
+			const cartId = cart?.id;
 			if (!cartId) {
 				addToast({
 					title: "Lỗi",
@@ -64,7 +79,7 @@ const ProductCardOnCart = ({ item }) => {
 
 	const handleRemove = async () => {
 		try {
-			const cartId = localStorage.getItem("cartId");
+			const cartId = cart?.id;
 			if (!cartId) {
 				addToast({
 					title: "Lỗi",
@@ -97,61 +112,84 @@ const ProductCardOnCart = ({ item }) => {
 	};
 
 	return (
-		<Card radius="sm" shadow="none" className="w-full min-h-fit flex flex-row gap-4">
-			<div className="w-full max-w-32 max-h-32">
-				<Image
-					alt={product.handle}
-					className="object-cover max-w-32 min-h-32 max-h-32 "
-					src={product.featuredImage.url}
-				/>
-			</div>
-
-			<CardBody>
-				<Link href={`/products/${product.handle}`} className="text-md font-semibold mb-2  text-black">
-					{product.title}
-				</Link>
-				<div className="flex flex-col items-start justify-between gap-2 mb-4">
-					<div className="flex items-center gap-2">
-						{isLoading ? (
-							<Skeleton className="w-8 h-4">
-								<p className="text-lg font-bold text-black-500">{quantity}</p> x
-							</Skeleton>
-						) : (
-							<>
-								<p className="text-lg font-bold text-black-500">{quantity}</p> x
-							</>
-						)}
-						<span className="text-lg font-bold text-red-500">
-							{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
-							{merchandise.price.currencyCode}
-						</span>
-						{item.cost.compareAtAmountPerQuantity && (
-							<span className="text-sm text-gray-500 line-through">
-								{new Intl.NumberFormat("vi-VN").format(
-									parseInt(item.cost.compareAtAmountPerQuantity.amount),
-								)}{" "}
-								VND
-							</span>
-						)}
-					</div>
-					<div className="flex items-center justify-between gap-2 w-full">
-						<Button
-							size="sm"
-							variant="flat"
-							onPress={() => handleQuantityChange(-1)}
-							isDisabled={quantity <= 1}>
-							-
-						</Button>
-						<Button size="sm" variant="flat" onPress={() => handleQuantityChange(1)}>
-							+
-						</Button>
-						<Button color="danger" variant="flat" onPress={handleRemove} className="ml-auto">
-							Xóa
-						</Button>
-					</div>
+		<>
+			<Card radius="sm" shadow="none" className="w-full min-h-fit flex flex-row gap-4">
+				<div className="w-full max-w-32 max-h-32">
+					<Image
+						alt={product.handle}
+						className="object-cover max-w-32 min-h-32 max-h-32 "
+						src={product.featuredImage.url}
+					/>
 				</div>
-			</CardBody>
-		</Card>
+
+				<CardBody>
+					<Link href={`/products/${product.handle}`} className="text-md font-semibold mb-2  text-black">
+						{product.title}
+					</Link>
+					<div className="flex flex-col items-start justify-between gap-2 mb-4">
+						<div className="flex items-center gap-2">
+							{isLoading ? (
+								<Skeleton className="w-8 h-4">
+									<p className="text-lg font-bold text-black-500">{quantity}</p> x
+								</Skeleton>
+							) : (
+								<>
+									<p className="text-lg font-bold text-black-500">{quantity}</p> x
+								</>
+							)}
+							<span className="text-lg font-bold text-red-500">
+								{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
+								{merchandise.price.currencyCode}
+							</span>
+							{item.cost.compareAtAmountPerQuantity && (
+								<span className="text-sm text-gray-500 line-through">
+									{new Intl.NumberFormat("vi-VN").format(
+										parseInt(item.cost.compareAtAmountPerQuantity.amount),
+									)}{" "}
+									VND
+								</span>
+							)}
+						</div>
+						<div className="flex items-center justify-between gap-2 w-full">
+							<Button
+								size="sm"
+								variant="flat"
+								onPress={() => handleQuantityChange(-1)}
+								isDisabled={quantity <= 1}>
+								-
+							</Button>
+							<Button size="sm" variant="flat" onPress={() => handleQuantityChange(1)}>
+								+
+							</Button>
+							<Button color="danger" variant="flat" onPress={onOpen} className="ml-auto">
+								Xóa
+							</Button>
+						</div>
+					</div>
+				</CardBody>
+			</Card>
+
+			<Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
+				<ModalContent>
+					{(onClose) => (
+						<>
+							<ModalHeader className="flex flex-col gap-1">Xóa khỏi giỏ hàng</ModalHeader>
+							<ModalBody>
+								<p>Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?</p>
+							</ModalBody>
+							<ModalFooter>
+								<Button color="primary" variant="light" onPress={onClose}>
+									Quay lại
+								</Button>
+								<Button color="danger" onPress={handleRemove}>
+									Xóa
+								</Button>
+							</ModalFooter>
+						</>
+					)}
+				</ModalContent>
+			</Modal>
+		</>
 	);
 };
 
