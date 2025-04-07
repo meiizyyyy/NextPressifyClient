@@ -199,7 +199,9 @@ const Header = () => {
 								<DropdownItem key="settings" as={Link} href="/account">
 									Cài đặt tài khoản
 								</DropdownItem>
-								<DropdownItem key="orders">Đơn hàng của tôi</DropdownItem>
+								<DropdownItem key="orders" as={Link} href="/orders">
+									Đơn hàng của tôi
+								</DropdownItem>
 								<DropdownItem key="logout" color="danger" onPress={handleLogout}>
 									Đăng xuất
 								</DropdownItem>

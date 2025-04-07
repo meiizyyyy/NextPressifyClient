@@ -133,38 +133,50 @@ const ProductCardOnCart = ({ item }) => {
 
 			<CardBody>
 				<h3 className="text-md font-semibold mb-2">{product.title}</h3>
-				<div className="flex items-center gap-2 mb-4">
-					{item.quantity} x
-					<span className="text-lg font-bold text-red-500">
-						{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
-						{merchandise.price.currencyCode}
-					</span>
-					{item.cost.compareAtAmountPerQuantity && (
-						<span className="text-sm text-gray-500 line-through">
-							{new Intl.NumberFormat("vi-VN").format(
-								parseInt(item.cost.compareAtAmountPerQuantity.amount),
-							)}{" "}
-							VND
-						</span>
-					)}
-					<Button
-						color="danger"
-						variant="flat"
-						// onPress={handleRemove}
-						className="ml-auto">
-						Xóa
-					</Button>
-				</div>
-				<div className="flex items-center gap-4">
+				<div className="flex items-center justify-between gap-2 mb-4">
 					<div className="flex items-center gap-2">
-						{/* <Button
+						<p className="text-lg font-bold text-black-500">{item.quantity}</p> x
+						<span className="text-lg font-bold text-red-500">
+							{new Intl.NumberFormat("vi-VN").format(parseInt(merchandise.price.amount))}
+							{merchandise.price.currencyCode}
+						</span>
+						{item.cost.compareAtAmountPerQuantity && (
+							<span className="text-sm text-gray-500 line-through">
+								{new Intl.NumberFormat("vi-VN").format(
+									parseInt(item.cost.compareAtAmountPerQuantity.amount),
+								)}{" "}
+								VND
+							</span>
+						)}
+					</div>
+					<div className="flex items-center gap-2">
+						<Button
 							size="sm"
 							variant="flat"
 							// onPress={() => handleQuantityChange(Math.max(1, quantity - 1))}
 							// isDisabled={quantity <= 1}
 						>
 							-
-						</Button> */}
+						</Button>
+						<Button
+							size="sm"
+							variant="flat"
+							// onPress={() => handleQuantityChange(quantity + 1)}
+							// isDisabled={quantity >= item.merchandise.availableForSale}
+						>
+							+
+						</Button>
+						<Button
+							color="danger"
+							variant="flat"
+							// onPress={handleRemove}
+							className="ml-auto">
+							Xóa
+						</Button>
+					</div>
+				</div>
+				<div className="flex items-center gap-4">
+					<div className="flex items-center gap-2">
 						{/* <Input
 							type="number"
 							min="1"
@@ -172,14 +184,6 @@ const ProductCardOnCart = ({ item }) => {
 							// onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
 							className="w-16 text-center"
 						/> */}
-						{/* <Button
-							size="sm"
-							variant="flat"
-							// onPress={() => handleQuantityChange(quantity + 1)}
-							// isDisabled={quantity >= item.merchandise.availableForSale}
-						>
-							+
-						</Button> */}
 					</div>
 				</div>
 			</CardBody>

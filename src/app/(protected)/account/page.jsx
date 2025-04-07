@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { Button, Card, CardBody, Input, Tabs, Tab, Checkbox, Switch } from "@heroui/react";
+import { Button, Card, CardBody, Input, Tabs, Tab, Checkbox, Switch, Avatar } from "@heroui/react";
 import { unauthorized, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -30,21 +30,33 @@ const AccountPage = () => {
 				variant="bordered"
 				aria-label="Account Tabs"
 				classNames={{
-					tab: "text-lg font-semibold",
+					tab: "text-lg font-semibold ",
 					tabList: "gap-12",
 					cursor: "w-full bg-primary",
-					panel: "pt-4",
+					panel: "pt-4 overflow-auto",
 				}}>
 				<Tab key="profile" title="Thông tin cá nhân">
 					<Card>
 						<CardBody>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div className="flex justify-center mt-5">
+								<Avatar
+									isBordered
+									as="button"
+									className="transition-transform"
+									color="secondary"
+									name={`${user.firstName} ${user.lastName}`}
+									size="lg"
+									src=""
+								/>
+							</div>
+
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
 								<div>
-									<label className="block text-sm font-medium mb-2">Họ</label>
+									<label className="block text-sm font-medium mb-2">Tên</label>
 									<Input type="text" defaultValue={user.firstName} className="w-full" />
 								</div>
 								<div>
-									<label className="block text-sm font-medium mb-2">Tên</label>
+									<label className="block text-sm font-medium mb-2">Họ</label>
 									<Input type="text" defaultValue={user.lastName} className="w-full" />
 								</div>
 								<div>

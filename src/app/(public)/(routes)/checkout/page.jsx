@@ -80,7 +80,7 @@ const CheckoutPage = () => {
 					<Link href={`/cart`}>Giỏ hàng</Link>
 				</BreadcrumbItem>
 				<BreadcrumbItem>
-					<Link href={`/checkout`}>Thanh toán</Link>
+					<Link href={`/checkout`}>Đặt hàng</Link>
 				</BreadcrumbItem>
 			</Breadcrumbs>
 			<h1 className="text-3xl font-bold mb-8">Đặt hàng</h1>
@@ -95,7 +95,7 @@ const CheckoutPage = () => {
 								name="firstName"
 								type="text"
 								variant="underlined"
-								defaultValue={user?.lastName + " " + user?.firstName || ""}
+								defaultValue={(user?.lastName || "") + " " + (user?.firstName || "")}
 							/>
 							<Input
 								isRequired
@@ -163,8 +163,8 @@ const CheckoutPage = () => {
 									<p className="font-medium">{item.merchandise.product.title}</p>
 									<p className="text-sm text-gray-500">Số lượng: {item.quantity}</p>
 								</div>
-								<p className="font-medium">
-									{new Intl.NumberFormat("vi-VN").format(item.cost.totalAmount.amount)}{" "}
+								<p className="font-medium text-red-500">
+									{new Intl.NumberFormat("vi-VN").format(item.cost.totalAmount.amount)}
 									{item.cost.totalAmount.currencyCode}
 								</p>
 							</div>

@@ -7,7 +7,7 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
 	const cartId = localStorage.getItem("cartId");
 
-	const { data, error, isLoading } = getCart(cartId);
+	const { data, error, isLoading, mutate } = getCart(cartId);
 
 	const [cart, setCart] = useState([]);
 
@@ -17,7 +17,11 @@ export const CartProvider = ({ children }) => {
 		}
 	}, [data]);
 
-	return <CartContext.Provider value={{ cart, setCart, isLoading, error }}>{children}</CartContext.Provider>;
+	return (
+		<CartContext.Provider value={{ cart, setCart, isLoading, error, refreshCart: mutate }}>
+			{children}
+		</CartContext.Provider>
+	);
 };
 
 export const useCart = () => {

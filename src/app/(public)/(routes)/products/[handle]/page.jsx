@@ -179,7 +179,7 @@ const ProductDetailPage = () => {
 	return (
 		<div className="flex flex-col gap-10 w-full">
 			<div className="container mx-auto px-4 py-10">
-				<Breadcrumbs className="mb-20">
+				<Breadcrumbs className="mb-16">
 					<BreadcrumbItem>
 						<Link href="/">Trang chủ</Link>
 					</BreadcrumbItem>

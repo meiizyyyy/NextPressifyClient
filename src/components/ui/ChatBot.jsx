@@ -91,7 +91,7 @@ const ChatBot = () => {
 			<Button
 				radius="large"
 				onPress={() => setIsOpen(true)}
-				className="fixed bottom-4 right-4 bg-primary text-white  shadow-lg z-50">
+				className="fixed bottom-4 right-4 bg-primary rounded-xl text-white  shadow-lg z-50">
 				<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
 					<g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
 						<path

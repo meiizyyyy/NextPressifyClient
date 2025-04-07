@@ -3,7 +3,7 @@
 import ProductCardOnCart from "@/components/cart/ProductCardOnCart";
 import CollectionSlider from "@/components/home/CollectionSlider";
 import { useCart } from "@/contexts/CartContext";
-import { BreadcrumbItem, Breadcrumbs, Button } from "@heroui/react";
+import { BreadcrumbItem, Breadcrumbs, Button, Divider } from "@heroui/react";
 import Link from "next/link";
 import React from "react";
 
@@ -25,7 +25,7 @@ const CartPage = () => {
 				</Breadcrumbs>
 				<h1 className="text-3xl font-bold mb-12">Giỏ hàng</h1>
 				<div className="flex flex-col lg:flex-row gap-6 mb-36 lg:mb-20">
-					{ !cart || cart.length === 0 ? (
+					{!cart || cart.length === 0 ? (
 						<div className="flex flex-col gap-6 lg:w-4/6">
 							<h4>Hiện không có sản phẩm nào trong giỏ hàng</h4>
 							<Button
@@ -61,7 +61,8 @@ const CartPage = () => {
 									{new Intl.NumberFormat("vi-VN").format(cart?.cost?.shippingAmount?.amount)}{" "}
 									{cart?.cost?.shippingAmount?.currencyCode}
 								</span>
-							</div>
+							</div>{" "}
+							<Divider />
 							<div className="flex justify-between"></div>
 							<div className="flex justify-between">
 								<span className="font-bold">Tổng cộng</span>
@@ -70,6 +71,7 @@ const CartPage = () => {
 									{cart?.cost?.totalAmount?.currencyCode}
 								</span>
 							</div>
+							<Divider />
 							<Button
 								className="w-full mt-4"
 								isDisabled={cart.length === 0}
