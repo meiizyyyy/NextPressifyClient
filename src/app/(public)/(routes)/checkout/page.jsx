@@ -20,6 +20,8 @@ import {
 	Textarea,
 } from "@heroui/react";
 import Link from "next/link";
+import CollectionSlider from "@/components/home/CollectionSlider";
+import { createOrder } from "@/services/api.services";
 
 const CheckoutPage = () => {
 	const router = useRouter();
@@ -36,11 +38,37 @@ const CheckoutPage = () => {
 			const data = Object.fromEntries(formData);
 
 			console.log("payment data submit", data);
+			console.log("cart info", cart);
+
+			const orderData = {
+				email: data.email || "",
+				phone: data.phone,
+				shippingAddress: {
+					address1: data.address1,
+					city: data.city,
+					province: data.province,
+					countryCode: "VN",
+					firstName: data.firstName,
+				},
+				note: data.note,
+				lineItems: cart.lines.map((line) => ({
+					variantId: line.merchandise.id,
+					quantity: line.quantity,
+				})),
+				totalPrice: cart.cost.totalAmount.amount,
+				paymentMethod: paymentMethod,
+			};
 
 			if (paymentMethod === "cod") {
 				console.log("Thanh toán khi nhận hàng");
+				console.log("orderData", orderData);
+				const res = await createOrder(orderData);
+				console.log("res", res);
+				router.push(`/order-success/${res.id}`);
 			} else {
 				console.log("Thanh toán với VNPAY");
+				console.log("orderData", orderData);
+                
 			}
 		} catch (error) {
 			console.error("Lỗi khi đặt hàng:", error);
@@ -71,114 +99,110 @@ const CheckoutPage = () => {
 	const total = cart.cost.totalAmount.amount;
 
 	return (
-		<div className="container mx-auto px-4 py-8">
-			<Breadcrumbs className="mb-16">
-				<BreadcrumbItem>
-					<Link href="/">Trang chủ</Link>
-				</BreadcrumbItem>
-				<BreadcrumbItem>
-					<Link href={`/cart`}>Giỏ hàng</Link>
-				</BreadcrumbItem>
-				<BreadcrumbItem>
-					<Link href={`/checkout`}>Đặt hàng</Link>
-				</BreadcrumbItem>
-			</Breadcrumbs>
-			<h1 className="text-3xl font-bold mb-8">Đặt hàng</h1>
-			<div className="flex w-full flex-col lg:flex-row gap-8">
-				<Card className=" p-6 lg:w-2/3" radius="sm">
-					<CardHeader className="text-xl font-semibold mb-4">Thông tin giao hàng</CardHeader>
-					<CardBody>
-						<Form className="flex flex-col gap-5" validationBehavior="native" onSubmit={onSubmit}>
-							<Input
-								isRequired
-								label="Tên người nhận"
-								name="firstName"
-								type="text"
-								variant="underlined"
-								defaultValue={(user?.lastName || "") + " " + (user?.firstName || "")}
-							/>
-							<Input
-								isRequired
-								label="Email"
-								name="email"
-								type="email"
-								variant="underlined"
-								defaultValue={user?.email || ""}
-							/>
-							<Input
-								isRequired
-								label="Số điện thoại"
-								name="phone"
-								type="text"
-								variant="underlined"
-								defaultValue={user?.phone || ""}
-							/>
-							<p>Địa chỉ nhận hàng</p>
-							<div className="flex gap-3 w-full">
-								<Input isRequired label="Thành phố" name="city" type="text" variant="underlined" />
+		<div className="container mx-auto px-4 py-8 flex flex-col gap-16">
+			<div>
+				<Breadcrumbs className="mb-16">
+					<BreadcrumbItem>
+						<Link href="/">Trang chủ</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem>
+						<Link href={`/cart`}>Giỏ hàng</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem>
+						<Link href={`/checkout`}>Đặt hàng</Link>
+					</BreadcrumbItem>
+				</Breadcrumbs>
+				<h1 className="text-3xl font-bold mb-8">Đặt hàng</h1>
+				<div className="flex w-full flex-col lg:flex-row gap-8">
+					<Card className=" p-6 lg:w-2/3" radius="sm">
+						<CardHeader className="text-xl font-semibold mb-4">Thông tin giao hàng</CardHeader>
+						<CardBody>
+							<Form className="flex flex-col gap-5" validationBehavior="native" onSubmit={onSubmit}>
 								<Input
 									isRequired
-									label="Quận/ Huyện"
-									name="province"
+									label="Tên người nhận"
+									name="firstName"
 									type="text"
 									variant="underlined"
+									defaultValue={(user?.lastName || "") + " " + (user?.firstName || "")}
+								/>
+								<Input
+									label="Email"
+									name="email"
+									type="email"
+									variant="underlined"
+									defaultValue={user?.email || ""}
 								/>
 								<Input
 									isRequired
-									label="Tên đường/ Số nhà/ Tòa nhà"
-									name="address1"
+									label="Số điện thoại"
+									name="phone"
 									type="text"
 									variant="underlined"
+									defaultValue={user?.phone || ""}
 								/>
-							</div>
-
-							<Textarea
-								disableAutosize
-								label="Ghi chú"
-								name="note"
-								placeholder="Ghi chú cho đơn hàng"
-								variant="underlined"
-							/>
-
-							<p>Phương thức thanh toán</p>
-							<RadioGroup name="paymentMethod" value={paymentMethod} onValueChange={setPaymentMethod}>
-								<Radio value="cod">Thanh toán khi nhận hàng (COD)</Radio>
-								<Radio value="vnpay">Thanh toán với VNPAY</Radio>
-							</RadioGroup>
-
-							<Button className="w-full" color="primary" type="submit" isLoading={isLoading}>
-								{paymentMethod === "cod" ? "Đặt hàng" : "Đi đến trang Thanh Toán"}
-							</Button>
-						</Form>
-					</CardBody>
-				</Card>
-
-				{/* Tổng quan đơn hàng */}
-				<Card className=" p-6 lg:w-1/3" radius="sm">
-					<CardHeader className="text-xl font-semibold mb-4">Tổng quan đơn hàng</CardHeader>
-					<CardBody className="space-y-4">
-						{cart.lines.map((item) => (
-							<div key={item.id} className="flex items-center justify-between">
-								<div>
-									<p className="font-medium">{item.merchandise.product.title}</p>
-									<p className="text-sm text-gray-500">Số lượng: {item.quantity}</p>
+								<p>Địa chỉ nhận hàng</p>
+								<div className="flex gap-3 w-full">
+									<Input isRequired label="Thành phố" name="city" type="text" variant="underlined" />
+									<Input
+										isRequired
+										label="Quận/ Huyện"
+										name="province"
+										type="text"
+										variant="underlined"
+									/>
+									<Input
+										isRequired
+										label="Tên đường/ Số nhà/ Tòa nhà"
+										name="address1"
+										type="text"
+										variant="underlined"
+									/>
 								</div>
-								<p className="font-medium text-red-500">
-									{new Intl.NumberFormat("vi-VN").format(item.cost.totalAmount.amount)}
-									{item.cost.totalAmount.currencyCode}
-								</p>
-							</div>
-						))}
-					</CardBody>
-					<Divider />
-					<CardFooter className="flex justify-between items-center">
-						<p className="font-semibold">Tổng cộng:</p>
-						<p className="text-xl font-bold text-danger-500">
-							{new Intl.NumberFormat("vi-VN").format(total)}đ
-						</p>
-					</CardFooter>
-				</Card>
+
+								<Textarea disableAutosize label="Ghi chú" name="note" variant="underlined" />
+
+								<p>Phương thức thanh toán</p>
+								<RadioGroup name="paymentMethod" value={paymentMethod} onValueChange={setPaymentMethod}>
+									<Radio value="cod">Thanh toán khi nhận hàng (COD)</Radio>
+									<Radio value="vnpay">Thanh toán với VNPAY</Radio>
+								</RadioGroup>
+
+								<Button className="w-full" color="primary" type="submit" isLoading={isLoading}>
+									{paymentMethod === "cod" ? "Đặt hàng" : "Đi đến trang Thanh Toán"}
+								</Button>
+							</Form>
+						</CardBody>
+					</Card>
+
+					<Card className=" p-6 lg:w-1/3" radius="sm">
+						<CardHeader className="text-xl font-semibold mb-4">Tổng quan đơn hàng</CardHeader>
+						<CardBody className="space-y-4">
+							{cart.lines.map((item) => (
+								<div key={item.id} className="flex items-center justify-between">
+									<div>
+										<p className="font-medium">{item.merchandise.product.title}</p>
+										<p className="text-sm text-gray-500">Số lượng: {item.quantity}</p>
+									</div>
+									<p className="font-medium text-red-500">
+										{new Intl.NumberFormat("vi-VN").format(item.cost.totalAmount.amount)}
+										{item.cost.totalAmount.currencyCode}
+									</p>
+								</div>
+							))}
+						</CardBody>
+						<Divider />
+						<CardFooter className="flex justify-between items-center">
+							<p className="font-semibold">Tổng cộng:</p>
+							<p className="text-xl font-bold text-danger-500">
+								{new Intl.NumberFormat("vi-VN").format(total)}đ
+							</p>
+						</CardFooter>
+					</Card>
+				</div>
 			</div>
+
+			<CollectionSlider handle="all" limit={10} additionalText="Có thể bạn sẽ thích" />
 		</div>
 	);
 };

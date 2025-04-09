@@ -11,16 +11,14 @@ import { useRouter } from "next/navigation";
 const CardDrawer = () => {
 	const router = useRouter();
 
-	const { cart, refreshCart } = useCart();
+	const { cart, handleGetCart, cartId } = useCart();
 	const [isOpen, setIsOpen] = useState(false);
-
-	console.log("Check cart", cart);
 
 	useEffect(() => {
 		if (isOpen) {
-			refreshCart(); // Gọi mutate để fetch lại data
+			handleGetCart(cartId);
 		}
-	}, [isOpen, refreshCart]);
+	}, [isOpen]);
 
 	const handleViewCart = () => {
 		setIsOpen(false);
@@ -43,8 +41,8 @@ const CardDrawer = () => {
 						<h3 className="text-lg font-bold">Giỏ Hàng</h3>
 					</DrawerHeader>
 					<DrawerBody className="overflow-y-auto flex flex-col justify-start ">
-						{cart?.lines?.length === 0 ? (
-							<h4>Hiện không có sản phẩm nào trong giỏ hàng</h4>
+						{cart?.lines?.length === 0 || !cart?.lines ? (
+							<h4 className="text-center">Hiện không có sản phẩm nào trong giỏ hàng</h4>
 						) : (
 							cart?.lines?.map((line) => <ProductCardOnCart key={line.id} item={line} />)
 						)}

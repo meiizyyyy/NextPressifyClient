@@ -20,6 +20,7 @@ import React, { useEffect, useState } from "react";
 import CollectionSlider from "@/components/home/CollectionSlider";
 import { useAuth } from "@/contexts/AuthContext";
 import LatestNews from "@/components/home/LatestNews";
+import { useCart } from "@/contexts/CartContext";
 
 const ProductDetailPage = () => {
 	const { handle } = useParams();
@@ -27,9 +28,10 @@ const ProductDetailPage = () => {
 	const [quantity, setQuantity] = useState(1);
 	const [activeTab, setActiveTab] = useState("description");
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-	const [cartId, setCartId] = useState(null);
+	const { cartId, setCartId } = useCart();
 	const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
 	const { user } = useAuth();
+
 	const handleQuantityChange = (change) => {
 		const newQuantity = Math.max(1, Math.min(maxQuantity, quantity + change));
 		setQuantity(newQuantity);

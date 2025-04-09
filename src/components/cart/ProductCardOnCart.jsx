@@ -20,7 +20,7 @@ import { addToast } from "@heroui/react";
 import { useState } from "react";
 
 const ProductCardOnCart = ({ item }) => {
-	const { cart, setCart, refreshCart } = useCart();
+	const { cart, handleGetCart, cartId } = useCart();
 	const merchandise = item.merchandise;
 	const product = merchandise.product;
 	const [quantity, setQuantity] = useState(item.quantity);
@@ -29,7 +29,6 @@ const ProductCardOnCart = ({ item }) => {
 	const handleQuantityChange = async (change) => {
 		setIsLoading(true);
 		try {
-			const cartId = cart?.id;
 			if (!cartId) {
 				addToast({
 					title: "Lỗi",
@@ -64,7 +63,7 @@ const ProductCardOnCart = ({ item }) => {
 					});
 				}
 				// Refresh giỏ hàng
-				refreshCart();
+				handleGetCart(cartId);
 				setIsLoading(false);
 			}
 		} catch (error) {
@@ -79,7 +78,6 @@ const ProductCardOnCart = ({ item }) => {
 
 	const handleRemove = async () => {
 		try {
-			const cartId = cart?.id;
 			if (!cartId) {
 				addToast({
 					title: "Lỗi",
@@ -100,7 +98,7 @@ const ProductCardOnCart = ({ item }) => {
 					description: "Sản phẩm đã được xóa khỏi giỏ hàng",
 					color: "success",
 				});
-				refreshCart();
+				handleGetCart(cartId);
 			}
 		} catch (error) {
 			addToast({

@@ -5,20 +5,35 @@ import { getCart } from "@/services/api.services";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-	const cartId = localStorage.getItem("cartId");
-
-	const { data, error, isLoading, mutate } = getCart(cartId);
-
 	const [cart, setCart] = useState([]);
+	const [cartId, setCartId] = useState(null);
+
+	const handleGetCart = async (cartId) => {
+		if (!cartId) {
+			return;
+		}
+		const res = await getCart(cartId);
+		if (res.data) {
+			setCart(res.data);
+		}
+	};
 
 	useEffect(() => {
-		if (data) {
-			setCart(data?.data);
+		const savedCartId = localStorage.getItem("cartId");
+		if (savedCartId) {
+			setCartId(savedCartId);
+		} else {
+			setCartId(null);
+			setCart([]);
 		}
-	}, [data]);
+	}, []);
+
+	useEffect(() => {
+		handleGetCart(cartId);
+	}, [cartId]);
 
 	return (
-		<CartContext.Provider value={{ cart, setCart, isLoading, error, refreshCart: mutate }}>
+		<CartContext.Provider value={{ cart, setCart, handleGetCart, cartId, setCartId }}>
 			{children}
 		</CartContext.Provider>
 	);

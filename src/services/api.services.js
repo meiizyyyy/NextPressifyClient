@@ -1,5 +1,5 @@
 "use client";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import axios from "axios";
 import dotenv from "dotenv";
 
@@ -17,47 +17,31 @@ export const fetchAllProducts = (cursor = null, sortKey = "CREATED_AT", reverse 
 };
 
 export const fetchHeaderMainMenu = () => {
-	return useSWR(
-		`${globalUrl}/menus/header-main-menu`,
-		fetcher,
-		{
-			// fallbackData: { data: { menu: [] } },
-			revalidateOnFocus: false,
-		},
-	);
+	return useSWR(`${globalUrl}/menus/header-main-menu`, fetcher, {
+		// fallbackData: { data: { menu: [] } },
+		revalidateOnFocus: false,
+	});
 };
 export const fetchHeaderCollection = () => {
-	return useSWR(
-		`${globalUrl}/menus/header-collection`,
-		fetcher,
-		{
-			// fallbackData: { data: { menu: [] } },
-			revalidateOnFocus: false,
-		},
-	);
+	return useSWR(`${globalUrl}/menus/header-collection`, fetcher, {
+		// fallbackData: { data: { menu: [] } },
+		revalidateOnFocus: false,
+	});
 };
 
 export const fetchHomePageMarketing = () => {
-	return useSWR(
-		`${globalUrl}/blogs/home-page-marketing`,
-		fetcher,
-		{
-			// fallbackData: { data: [] },
-			revalidateOnFocus: false,
-		},
-	);
+	return useSWR(`${globalUrl}/blogs/home-page-marketing`, fetcher, {
+		// fallbackData: { data: [] },
+		revalidateOnFocus: false,
+	});
 };
 
 export const fetchHomePageBanner = () => {
-	return useSWR(
-		`${globalUrl}/blogs/home-page-banner`,
-		fetcher,
-		{
-			// fallbackData: { data: [] },
-			revalidateOnFocus: false,
-			revalidateIfStale: false,
-		},
-	);
+	return useSWR(`${globalUrl}/blogs/home-page-banner`, fetcher, {
+		// fallbackData: { data: [] },
+		revalidateOnFocus: false,
+		revalidateIfStale: false,
+	});
 };
 
 export const fetchAllCollection = () => {
@@ -68,38 +52,26 @@ export const fetchAllCollection = () => {
 };
 
 export const fetchBrandCategoriesCollection = () => {
-	return useSWR(
-		`${globalUrl}/collections/brand-categories`,
-		fetcher,
-		{
-			// fallbackData: { data: { collections: [] } },
-			revalidateOnFocus: false,
-			revalidateIfStale: false,
-		},
-	);
+	return useSWR(`${globalUrl}/collections/brand-categories`, fetcher, {
+		// fallbackData: { data: { collections: [] } },
+		revalidateOnFocus: false,
+		revalidateIfStale: false,
+	});
 };
 
 export const fetchProductCategoriesCollection = () => {
-	return useSWR(
-		`${globalUrl}/collections/product-categories`,
-		fetcher,
-		{
-			// fallbackData: { data: { collections: [] } },
-			revalidateOnFocus: false,
-			revalidateIfStale: false,
-		},
-	);
+	return useSWR(`${globalUrl}/collections/product-categories`, fetcher, {
+		// fallbackData: { data: { collections: [] } },
+		revalidateOnFocus: false,
+		revalidateIfStale: false,
+	});
 };
 
 export const fetchHomeSliderCollections = () => {
-	return useSWR(
-		`${globalUrl}/collections/home-slider-collections`,
-		fetcher,
-		{
-			fallbackData: { data: { collections: [] } },
-			revalidateOnFocus: false,
-		},
-	);
+	return useSWR(`${globalUrl}/collections/home-slider-collections`, fetcher, {
+		fallbackData: { data: { collections: [] } },
+		revalidateOnFocus: false,
+	});
 };
 
 export const fetchCollectionByHandle = (handle, cursor = null, sortKey = "CREATED_AT", reverse = true) => {
@@ -195,17 +167,13 @@ export const customerCartIdUpdate = async (cartId, customerId) => {
 	}
 };
 
-export const getCart = (cartId) => {
-	if (!cartId) {
-		return { data: null, error: null, isLoading: false };
+export const getCart = async (cartId) => {
+	try {
+		const res = await axios.get(`${globalUrl}/cart/get-cart?cartId=${cartId}`);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
 	}
-
-	const url = `${globalUrl}/cart/get-cart?cartId=${cartId}`;
-
-	return useSWR(url, fetcher, {
-		revalidateOnFocus: true,
-		// fallbackData: {},
-	});
 };
 
 export const addToCart = async (data) => {
@@ -229,6 +197,15 @@ export const updateCartLine = async (data) => {
 export const removeFromCart = async (data) => {
 	try {
 		const res = await axios.post(`${globalUrl}/cart/remove-from-cart`, data);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
+
+export const createOrder = async (orderData) => {
+	try {
+		const res = await axios.post(`${globalUrl}/checkout/create-order`, orderData);
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error;
