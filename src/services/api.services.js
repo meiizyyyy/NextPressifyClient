@@ -211,3 +211,12 @@ export const createOrder = async (orderData) => {
 		throw error.response?.data || error;
 	}
 };
+
+export const createVNPayOrder = async (orderData) => {
+	try {
+		const res = await axios.post(`${globalUrl}/payment/create_payment_url`, orderData);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};

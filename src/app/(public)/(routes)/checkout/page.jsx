@@ -21,7 +21,7 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import CollectionSlider from "@/components/home/CollectionSlider";
-import { createOrder } from "@/services/api.services";
+import { createOrder, createVNPayOrder } from "@/services/api.services";
 
 const CheckoutPage = () => {
 	const router = useRouter();
@@ -37,26 +37,28 @@ const CheckoutPage = () => {
 			const formData = new FormData(event.currentTarget);
 			const data = Object.fromEntries(formData);
 
-			console.log("payment data submit", data);
 			console.log("cart info", cart);
 
 			const orderData = {
 				email: data.email || "",
+				note: data.note,
 				phone: data.phone,
 				shippingAddress: {
 					address1: data.address1,
 					city: data.city,
 					province: data.province,
-					countryCode: "VN",
 					firstName: data.firstName,
+					lastName: data.lastName || data.firstName,
+					phone: data.phone,
 				},
-				note: data.note,
 				lineItems: cart.lines.map((line) => ({
 					variantId: line.merchandise.id,
 					quantity: line.quantity,
+					requiresShipping: true,
 				})),
 				totalPrice: cart.cost.totalAmount.amount,
-				paymentMethod: paymentMethod,
+				paymentMethod: paymentMethod === "cod" ? "Cash on Delivery" : "VNPAY",
+				financialStatus: "PENDING",
 			};
 
 			if (paymentMethod === "cod") {
@@ -68,7 +70,9 @@ const CheckoutPage = () => {
 			} else {
 				console.log("Thanh toán với VNPAY");
 				console.log("orderData", orderData);
-                
+				const res = await createVNPayOrder(orderData);
+				console.log("res", res);
+				// window.location.href = res.url;
 			}
 		} catch (error) {
 			console.error("Lỗi khi đặt hàng:", error);
@@ -120,11 +124,19 @@ const CheckoutPage = () => {
 							<Form className="flex flex-col gap-5" validationBehavior="native" onSubmit={onSubmit}>
 								<Input
 									isRequired
-									label="Tên người nhận"
+									label="Họ và tên đệm"
+									name="lastName"
+									type="text"
+									variant="underlined"
+									defaultValue={user?.lastName || ""}
+								/>
+								<Input
+									isRequired
+									label="Tên"
 									name="firstName"
 									type="text"
 									variant="underlined"
-									defaultValue={(user?.lastName || "") + " " + (user?.firstName || "")}
+									defaultValue={user?.firstName || ""}
 								/>
 								<Input
 									label="Email"
