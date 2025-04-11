@@ -65,8 +65,10 @@ const CheckoutPage = () => {
 				console.log("Thanh toán khi nhận hàng");
 				console.log("orderData", orderData);
 				const res = await createOrder(orderData);
-				console.log("res", res);
-				router.push(`/order-success`);
+
+				const orderId = res.data.id.split("/").pop();
+
+				router.push(`/order-success?orderId=${orderId}`);
 			} else {
 				console.log("Thanh toán với VNPAY");
 				console.log("orderData", orderData);

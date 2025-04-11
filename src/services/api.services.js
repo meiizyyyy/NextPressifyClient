@@ -203,6 +203,14 @@ export const removeFromCart = async (data) => {
 	}
 };
 
+export const getOrder = async (orderId) => {
+	try {
+		const res = await axios.get(`${globalUrl}/orders/${orderId}`);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
 export const createOrder = async (orderData) => {
 	try {
 		const res = await axios.post(`${globalUrl}/checkout/create-order`, orderData);
