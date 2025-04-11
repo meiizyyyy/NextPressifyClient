@@ -220,3 +220,12 @@ export const createVNPayOrder = async (orderData) => {
 		throw error.response?.data || error;
 	}
 };
+
+export const verifyVNPAYPayment = async (vnp_Params) => {
+	try {
+		const res = await axios.get(`${globalUrl}/payment/vnpay_ipn`, { params: vnp_Params });
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};

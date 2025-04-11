@@ -72,7 +72,7 @@ const CheckoutPage = () => {
 				console.log("orderData", orderData);
 				const res = await createVNPayOrder(orderData);
 				console.log("res", res);
-				// window.location.href = res.url;
+				window.location.href = res.url;
 			}
 		} catch (error) {
 			console.error("Lỗi khi đặt hàng:", error);
