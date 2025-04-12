@@ -212,6 +212,14 @@ export const removeFromCart = async (data) => {
 	}
 };
 
+export const getCustomerOrders = async (customerId) => {
+	try {
+		const res = await axios.post(`${globalUrl}/customers/get-customer-orders`, { customerId });
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
 export const getOrder = async (orderId) => {
 	try {
 		const res = await axios.get(`${globalUrl}/orders/${orderId}`);
@@ -241,6 +249,15 @@ export const createVNPayOrder = async (orderData) => {
 export const verifyVNPAYPayment = async (vnp_Params) => {
 	try {
 		const res = await axios.get(`${globalUrl}/payment/vnpay_ipn`, { params: vnp_Params });
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
+
+export const cancelOrderByCustomer = async (orderId, note) => {
+	try {
+		const res = await axios.post(`${globalUrl}/orders/cancel`, { orderId, note });
 		return res.data;
 	} catch (error) {
 		throw error.response?.data || error;

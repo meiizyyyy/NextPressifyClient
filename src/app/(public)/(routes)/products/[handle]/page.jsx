@@ -390,12 +390,18 @@ const ProductDetailPage = () => {
 								<CardBody>
 									<table className="w-full">
 										<tbody>
-											{product.metafields?.edges?.map((edge) => (
-												<tr key={edge.node.key} className="border-b">
-													<td className="py-5 font-medium">{edge?.node?.definition?.name}</td>
-													<td className="py-5">{edge?.node?.jsonValue}</td>
-												</tr>
-											))}
+											{product.metafields ? (
+												product.metafields?.edges?.map((edge) => (
+													<tr key={edge.node.key} className="border-b">
+														<td className="py-5 font-medium">
+															{edge?.node?.definition?.name}
+														</td>
+														<td className="py-5">{edge?.node?.jsonValue}</td>
+													</tr>
+												))
+											) : (
+												<p>Không có thông số kỹ thuật</p>
+											)}
 										</tbody>
 									</table>
 								</CardBody>
