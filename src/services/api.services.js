@@ -167,6 +167,15 @@ export const customerCartIdUpdate = async (cartId, customerId) => {
 	}
 };
 
+export const updateCustomer = async (data) => {
+	try {
+		const res = await axios.post(`${globalUrl}/customers/update-customer`, data);
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
+
 export const getCart = async (cartId) => {
 	try {
 		const res = await axios.get(`${globalUrl}/cart/get-cart?cartId=${cartId}`);

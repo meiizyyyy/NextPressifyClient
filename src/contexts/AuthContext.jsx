@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
 		sessionStorage.removeItem("expiresAt");
 	};
 
-	return <AuthContext.Provider value={{ user, login, logout, loading }}>{!loading && children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={{ user,setUser, login, logout, loading }}>{!loading && children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

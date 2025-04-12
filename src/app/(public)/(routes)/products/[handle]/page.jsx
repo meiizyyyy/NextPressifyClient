@@ -115,7 +115,7 @@ const ProductDetailPage = () => {
 		} catch (error) {
 			addToast({
 				title: "Lỗi",
-				description: error.message || "Có lỗi xảy ra",
+				description: error.message || "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng",
 				color: "danger",
 			});
 		} finally {
@@ -231,12 +231,12 @@ const ProductDetailPage = () => {
 						<p className="text-sm text-gray-600 mb-4">{product.vendor}</p>
 
 						<div className="flex items-center gap-4 mb-6">
-							<span className="text-2xl font-bold text-red-500">
+							<span className="text-3xl font-bold text-red-600">
 								{price} {product.priceRangeV2.maxVariantPrice.currencyCode || "VND"}
 							</span>
 							{comparePrice && (
 								<>
-									<span className="text-gray-500 line-through">
+									<span className="text-gray-500 text-xl line-through">
 										{comparePrice}
 										{product.compareAtPriceRange.maxVariantCompareAtPrice.currencyCode || "VND"}
 									</span>
@@ -249,7 +249,7 @@ const ProductDetailPage = () => {
 
 						<div className="mb-6">
 							<h3 className="text-lg font-semibold mb-2">Số lượng</h3>
-							<h3> {product.variants.edges[0].node.id}</h3>
+
 							<div className="flex items-center">
 								<Button
 									size="sm"
