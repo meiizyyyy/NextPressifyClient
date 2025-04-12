@@ -68,7 +68,6 @@ const App = () => {
 						)} */}
 					</>
 				)}
-				<Divider />
 
 				<HomePageSliders />
 				<HomePageCollection />

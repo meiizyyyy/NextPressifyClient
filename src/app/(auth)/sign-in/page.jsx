@@ -64,6 +64,14 @@ const SignInPage = (props) => {
 		}
 	};
 
+	const handleForgotPassword = async () => {
+		addToast({
+			title: "Quên mật khẩu",
+			description: "Chức năng đang phát triển vui lòng thử lại sau",
+			color: "warning",
+		});
+	};
+
 	return (
 		<div className="w-full h-full ">
 			<Aurora colorStops={["#3A29FF", "#FF94B4", "#FF3232"]} blend={0.5} amplitude={1.0} speed={0.5} />
@@ -118,7 +126,7 @@ const SignInPage = (props) => {
 								onValueChange={setIsRememberMe}>
 								Giữ tôi đăng nhập
 							</Checkbox>
-							<Link className="text-default-500" href="#" size="sm">
+							<Link className="text-default-500" href="#" size="sm" onPress={handleForgotPassword}>
 								Quên mật khẩu?
 							</Link>
 						</div>

@@ -7,9 +7,9 @@ import { fetchNewsBlogs } from "@/services/api.services";
 import Link from "next/link";
 
 const ArticleDetailPage = () => {
-	const { blogHandle, articleHandle } = useParams();
+	const { articleHandle } = useParams();
 	const { data, isLoading } = fetchNewsBlogs();
-
+	const article = data?.data?.articles?.find((item) => item.handle === articleHandle);
 	if (isLoading) {
 		return (
 			<div className="container mx-auto px-4 py-8">
@@ -26,8 +26,6 @@ const ArticleDetailPage = () => {
 			</div>
 		);
 	}
-
-	const article = data?.data?.articles?.find((item) => item.handle === articleHandle);
 
 	if (!article) {
 		return (
