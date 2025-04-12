@@ -33,12 +33,9 @@ export const AuthProvider = ({ children }) => {
 		const customer = customerDetails.customer.data.customer;
 		setUser(customer);
 
-		// Xử lý cartId
 		if (customer.metafield?.key === "cartId") {
-			// Nếu có cartId trong metafield, sử dụng nó
 			localStorage.setItem("cartId", customer.metafield.value);
 		} else if (localStorage.getItem("cartId")) {
-			// Nếu không có cartId trong metafield, sử dụng cartId trong localStorage và thêm vào metafield
 			customer.metafield = {
 				key: "cartId",
 				value: localStorage.getItem("cartId"),
@@ -71,7 +68,11 @@ export const AuthProvider = ({ children }) => {
 		sessionStorage.removeItem("expiresAt");
 	};
 
-	return <AuthContext.Provider value={{ user,setUser, login, logout, loading }}>{!loading && children}</AuthContext.Provider>;
+	return (
+		<AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
+			{!loading && children}
+		</AuthContext.Provider>
+	);
 };
 
 export const useAuth = () => {

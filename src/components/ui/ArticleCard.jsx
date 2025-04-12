@@ -4,7 +4,7 @@ import { Button, Card, CardBody, CardFooter, Image } from "@heroui/react";
 import Link from "next/link";
 
 const ArticleCard = ({ article }) => {
-	const { title, handle, image, publishedAt, author } = article;
+	const { id, title, handle, image, publishedAt, author } = article;
 
 	return (
 		<Card className="h-full hover:shadow-lg hover:scale-105 transition-all duration-400">

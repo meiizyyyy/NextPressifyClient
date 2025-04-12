@@ -32,6 +32,14 @@ const ArticleDetailPage = () => {
 	if (!article) {
 		return (
 			<div className="container mx-auto px-4 py-8">
+				<Breadcrumbs className="mb-10">
+					<BreadcrumbItem>
+						<Link href="/">Trang chủ</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem>
+						<Link href="/blogs/news">News Feed</Link>
+					</BreadcrumbItem>
+				</Breadcrumbs>
 				<div className="max-w-4xl mx-auto text-center">
 					<h1 className="text-2xl font-bold mb-4">Không tìm thấy bài viết</h1>
 					<p className="text-gray-600">Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>

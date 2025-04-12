@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, CardBody, CardFooter, Image, CardHeader } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, Image, CardHeader, Link } from "@heroui/react";
 import { fetchHomePageMarketing } from "@/services/api.services";
 import HomePageMarketingGrid from "../skeletons/HomePageMarketingGrid";
 
@@ -61,7 +61,7 @@ const CollectionsGrid = () => {
 								<p className="text-tiny text-white/60">Get a good night's sleep.</p>
 							</div> */}
 						</div>
-						<Button radius="sm" size="sm" className="">
+						<Button as={Link} href={`blogs/article/${article.handle}`} radius="sm" size="sm" className="">
 							Khám Phá Ngay
 						</Button>
 					</CardFooter>

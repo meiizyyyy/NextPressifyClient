@@ -10,6 +10,7 @@ const systemPrompt = `Bạn là một AI trợ lý tư vấn sản phẩm. Nhi�
 1. Phân tích nhu cầu người dùng
 2. Đề xuất sản phẩm phù hợp ngay lập tức
 3. Giải thích ngắn gọn lý do đề xuất
+4. Nếu người dùng hỏi về sản phẩm, hãy đưa ra các câu hỏi để hiểu rõ hơn nhu cầu của người dùng
 
 QUAN TRỌNG: Trả về JSON theo format sau:
 {
@@ -79,7 +80,7 @@ export async function POST(req) {
 		let products = [];
 		if (parsedResponse.searchQuery) {
 			try {
-				const searchResult = await axios.get(`${API_URL}/api/products/search`, {
+				const searchResult = await axios.get(`${API_URL}/v1/products/search`, {
 					params: { query: parsedResponse.searchQuery },
 				});
 				products = searchResult.data?.products?.edges?.map((edge) => edge.node) || [];

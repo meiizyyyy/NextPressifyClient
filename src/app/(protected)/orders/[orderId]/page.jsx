@@ -23,6 +23,7 @@ import {
 	SelectItem,
 	useDisclosure,
 } from "@heroui/react";
+
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -99,7 +100,7 @@ const OrderDetailsPage = ({ params }) => {
 			const response = await cancelOrderByCustomer(orderId, data.note);
 
 			if (response.success && response.order?.orderCancel?.job.id) {
-				handleGetOrder();
+				await handleGetOrder();
 				addToast({
 					title: "Thành công",
 					description: "Đơn hàng đã được hủy thành công",
@@ -173,7 +174,6 @@ const OrderDetailsPage = ({ params }) => {
 												{order?.lineItems?.map((item, index) => (
 													<div key={index} className="flex gap-4">
 														<div className="w-fit h-fit bg-gray-100 rounded-lg">
-															{/* Image sẽ được thêm sau */}
 															<Image src={item.image.url} alt={item.name} height={100} />
 														</div>
 														<div className="flex-1">
@@ -252,6 +252,8 @@ const OrderDetailsPage = ({ params }) => {
 										<p>
 											{order?.shippingAddress?.province}, {order?.shippingAddress?.city}
 										</p>
+										<h2 className="text-xl font-semibold">Ghi chú</h2>
+										<p>{order?.note}</p>
 									</div>
 								</CardBody>
 							</Card>

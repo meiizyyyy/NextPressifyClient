@@ -121,6 +121,15 @@ export const fetchNewsBlogs = (cursor = null, sortKey = "CREATED_AT", reverse = 
 	});
 };
 
+export const fetchArticle = async (id) => {
+	try {
+		const res = await axios.post(`${globalUrl}/blogs/article`, { id });
+		return res.data;
+	} catch (error) {
+		throw error.response?.data || error;
+	}
+};
+
 export const signUp = async (data) => {
 	try {
 		const res = await axios.post(`${globalUrl}/customers/register`, data);
