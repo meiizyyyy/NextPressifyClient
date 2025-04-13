@@ -25,7 +25,7 @@ const CartPage = () => {
 				</Breadcrumbs>
 				<h1 className="text-3xl font-bold mb-12">Giỏ hàng</h1>
 				<div className="flex flex-col lg:flex-row gap-6 mb-36 lg:mb-20">
-					{cart.totalQuantity === 0 ? (
+					{cart.totalQuantity === 0 || cart.length === 0 ? (
 						<div className="flex flex-col gap-6 lg:w-4/6">
 							<h4>Hiện không có sản phẩm nào trong giỏ hàng</h4>
 							<Button
@@ -34,7 +34,7 @@ const CartPage = () => {
 								variant="flat"
 								as={Link}
 								href="/collections/all">
-								Đi đến trang sản phẩm
+								Bắt đầu mua sắm
 							</Button>
 						</div>
 					) : (

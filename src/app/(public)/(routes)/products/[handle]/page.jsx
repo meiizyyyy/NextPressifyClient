@@ -54,8 +54,8 @@ const ProductDetailPage = () => {
 
 	// Xử lý khi thêm vào giỏ hàng
 	const handleAddToCart = async () => {
+		setIsAddToCartLoading(true);
 		try {
-			setIsAddToCartLoading(true);
 			let currentCartId = cartId;
 
 			if (!currentCartId) {
@@ -88,7 +88,6 @@ const ProductDetailPage = () => {
 				});
 			}
 
-			// Đảm bảo có cartId trước khi thêm vào giỏ hàng
 			if (!currentCartId) {
 				throw new Error("Không tìm thấy ID giỏ hàng");
 			}
@@ -114,9 +113,11 @@ const ProductDetailPage = () => {
 			}
 		} catch (error) {
 			addToast({
-				title: "Lỗi",
-				description: error.message || "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng",
-				color: "danger",
+				title: "Chưa có giỏ hàng",
+				description:
+					"Đã tạo mới giỏ hàng, vui lòng thêm lại sản phẩm vào giỏ hàng " ||
+					"Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng",
+				color: "warning",
 			});
 		} finally {
 			setIsAddToCartLoading(false);

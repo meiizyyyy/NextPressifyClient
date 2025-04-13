@@ -25,6 +25,7 @@ const AccountPage = () => {
 	const router = useRouter();
 	const [activeTab, setActiveTab] = useState("profile");
 	const [isSelected, setIsSelected] = useState(user?.acceptsMarketing || false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		if (!user) {
@@ -37,6 +38,7 @@ const AccountPage = () => {
 	}
 
 	const handleProfileSubmit = async (event) => {
+		setIsLoading(true);
 		event.preventDefault();
 
 		const formData = new FormData(event.currentTarget);
@@ -83,6 +85,8 @@ const AccountPage = () => {
 				description: error.message,
 				variant: "error",
 			});
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -185,7 +189,7 @@ const AccountPage = () => {
 									/>
 								</div>
 								<div className="col-span-2 flex justify-end gap-4">
-									<Button color="primary" type="submit">
+									<Button color="primary" type="submit" isLoading={isLoading}>
 										Cập nhật thông tin
 									</Button>
 								</div>
